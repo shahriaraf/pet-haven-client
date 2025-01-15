@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from './Provider/Authprovider';
 
 const Navbar = () => {
+  const { user, signOutUser } = useContext(AuthContext);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,6 +17,10 @@ const Navbar = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
 
   return (
     <nav
@@ -32,23 +39,49 @@ const Navbar = () => {
             Pet<span className="text-[#ECA511] font-bold">H</span>aven
           </span>
         </a>
+
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <button
-            type="button"
-            className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-            id="user-menu-button"
-            aria-expanded="false"
-            data-dropdown-toggle="user-dropdown"
-            data-dropdown-placement="bottom"
-          >
-            <span className="sr-only">Open user menu</span>
-            <img
-              className="w-8 h-8 rounded-full"
-              src="/docs/images/people/profile-picture-3.jpg"
-              alt="user photo"
-            />
-          </button>
+          {user ? (
+            // Show profile photo and dropdown when logged in
+            <div className="relative">
+              <button
+                type="button"
+                onClick={toggleDropdown}
+                className="flex text-sm bg-gray-800 rounded-full"
+                aria-expanded={dropdownOpen ? 'true' : 'false'}
+              >
+                <img
+                  className="w-12 h-12 rounded-full"
+                  src={user.photoURL || '/default-profile.jpg'} // Replace with user's photo URL
+                  alt="user photo"
+                />
+              </button>
+              {dropdownOpen && (
+                <div className="absolute top-10 right-0 bg-white text-[#6d165D] p-3 rounded-md shadow-lg">
+                  <ul className="space-y-2">
+                    <li>
+                      <Link
+                        to="/dashboard"
+                        className="block px-4 py-2 text-sm bg-[#ECA511] font-semibold hover:bg-[#ad7804] rounded-lg"
+                      >
+                        Dashboard
+                      </Link>
+                    </li>
+                    <li>
+                      <button
+                        onClick={signOutUser}
+                        className="block w-full px-4 py-2 text-sm bg-red-600 font-semibold hover:bg-red-700 rounded-lg"
+                      >
+                        Log Out
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          ) : ""}
         </div>
+
         <div
           className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
           id="navbar-user"
@@ -60,20 +93,27 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/about" className="text-white hover:underline hover:text-black">
-                About
+              <Link to="/petlist" className="text-white hover:underline hover:text-black">
+                Petlist
               </Link>
             </li>
             <li>
-              <Link to="/services" className="text-white hover:underline hover:text-black">
-                Services
+              <Link to="/add-pet" className="text-white hover:underline hover:text-black">
+                Add Pet
               </Link>
             </li>
-            <li>
-              <Link to="/contact" className="text-white hover:underline hover:text-black">
-                Contact
+            {
+              !user? <>
+               <div className="flex space-x-4">
+              <Link to="/login" className="text-white hover:underline hover:text-black">
+                Login
               </Link>
-            </li>
+              <Link to="/register" className="text-white hover:underline hover:text-black">
+                Sign Up
+              </Link>
+            </div>
+              </> : ""
+            }
           </ul>
         </div>
       </div>
