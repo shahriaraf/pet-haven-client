@@ -61,7 +61,7 @@ const Navbar = () => {
                   <ul className="space-y-2">
                     <li>
                       <Link
-                        to="/dashboard"
+                        to="/user-dashboard"
                         className="block px-4 py-2 text-sm bg-[#ECA511] font-semibold hover:bg-[#ad7804] rounded-lg"
                       >
                         Dashboard
@@ -98,8 +98,8 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/add-pet" className="text-white hover:underline hover:text-black">
-                Add Pet
+              <Link to="/donation" className="text-white hover:underline hover:text-black">
+                Donation Campaigns
               </Link>
             </li>
             {

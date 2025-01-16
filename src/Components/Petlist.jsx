@@ -1,137 +1,105 @@
 import React, { useState, useEffect } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { useInView } from 'react-intersection-observer';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 
-const Petlist = ({ user }) => {
-    const [search, setSearch] = useState('');
-    const [category, setCategory] = useState('');
-    const [selectedPet, setSelectedPet] = useState(null); // Modal state
-    const { ref, inView } = useInView();
+const PetList = () => {
+  const [pets, setPets] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [filteredPets, setFilteredPets] = useState([]);
 
-    // Fetch pets using TanStack Query
-    const fetchPets = async ({ pageParam = 1 }) => {
-        const response = await axios.get('/pets', {
-            params: { page: pageParam, limit: 10, search, category },
-        });
-        return response.data;
+  // Fetch pets data
+  useEffect(() => {
+    const fetchPets = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/pets');
+        const data = await response.json();
+        const unadoptedPets = data.filter((pet) => !pet.adopted);
+        setPets(unadoptedPets);
+      } catch (error) {
+        console.error('Failed to fetch pets:', error);
+      }
     };
 
-    const {
-        data,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
-    } = useInfiniteQuery({
-        queryKey: ['pets', { search, category }],
-        queryFn: fetchPets,
-        getNextPageParam: (lastPage, pages) => (lastPage.length ? pages.length + 1 : undefined),
-    });
+    fetchPets();
+  }, []);
 
-    // Fetch next page when in view
-    useEffect(() => {
-        if (inView && hasNextPage) fetchNextPage();
-    }, [inView, hasNextPage, fetchNextPage]);
+  // Filter pets based on search term and category
+  useEffect(() => {
+    let filtered = pets;
 
-    // Handle modal submission
-    const handleAdoptionSubmit = async (formData) => {
-        try {
-            await axios.post('/adopt', formData);
-            alert('Adoption request submitted successfully!');
-            setSelectedPet(null); // Close modal
-        } catch (error) {
-            console.error('Failed to submit adoption request:', error);
-            alert('Failed to submit the adoption request.');
-        }
-    };
+    if (searchTerm) {
+      filtered = filtered.filter((pet) =>
+        pet.petName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
 
-    return (
-        <div className="petlist-container">
-            {/* Search and Filter */}
-            <div className="search-filter">
-                <input
-                    type="text"
-                    placeholder="Search by name"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-                <select onChange={(e) => setCategory(e.target.value)} value={category}>
-                    <option value="">All Categories</option>
-                    <option value="dog">Dog</option>
-                    <option value="cat">Cat</option>
-                </select>
+    if (categoryFilter) {
+      filtered = filtered.filter((pet) => pet.petCategory === categoryFilter);
+    }
+
+    // Sort pets by date in descending order (assuming pets have a `dateAdded` field)
+    filtered.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+
+    setFilteredPets(filtered);
+  }, [pets, searchTerm, categoryFilter]);
+
+  return (
+    <div className="max-w-7xl mx-auto p-6 pt-36">
+      <h1 className="text-3xl font-bold text-center mb-12">Available Pets</h1>
+
+      {/* Filters */}
+      <div className="flex justify-between items-center mb-6">
+        {/* Search */}
+        <input
+          type="text"
+          placeholder="Search by name..."
+          className="w-1/2 p-2 border rounded-lg"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        {/* Category Filter */}
+        <select
+          className="px-3 py-1 border rounded-full "
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+        >
+          <option value="">All Categories</option>
+          <option value="Dog">Dog</option>
+          <option value="Cat">Cat</option>
+          <option value="Bird">Bird</option>
+          <option value="Reptile">Reptile</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      {/* Pet Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredPets.map((pet) => (
+          <div key={pet._id} className="bg-slate-100 shadow-lg shadow-gray-400 rounded-lg overflow-hidden">
+            <img
+              src={pet.petImage}
+              alt={pet.petName}
+              className="w-full h-72 object-cover"
+            />
+            <div className="p-4">
+              <h2 className="text-xl font-bold">{pet.petName}</h2>
+              <p className="text-gray-600">Age: {pet.petAge}</p>
+              <p className="text-gray-600">Location: {pet.petLocation}</p>
+              <div className="mt-4">
+                <Link to={`/pets/${pet._id}`}><button
+                  className="w-full py-2 bg-[#6d165D] text-white rounded-lg hover:text-[#6d165D] hover:bg-[#ECA511] transition duration-300"
+                >
+                  View Details
+                </button></Link> 
+              
+              </div>
             </div>
-
-            {/* Pet Grid */}
-            <div className="pet-grid">
-                {data?.pages.flatMap((page) =>
-                    page.map((pet) => (
-                        <div key={pet.id} className="pet-card">
-                            <img src={pet.image} alt={pet.name} />
-                            <h3>{pet.name}</h3>
-                            <p>Age: {pet.age}</p>
-                            <p>Location: {pet.location}</p>
-                            <button onClick={() => setSelectedPet(pet)}>Adopt</button>
-                        </div>
-                    ))
-                )}
-            </div>
-
-            {/* Infinite Scroll Loader */}
-            <div ref={ref} className="loader">
-                {isFetchingNextPage && <p>Loading more pets...</p>}
-            </div>
-
-            {/* Modal */}
-            {selectedPet && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <h2>Adopt {selectedPet.name}</h2>
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                const formData = {
-                                    petId: selectedPet.id,
-                                    petName: selectedPet.name,
-                                    petImage: selectedPet.image,
-                                    userName: user.name,
-                                    userEmail: user.email,
-                                    phone: e.target.phone.value,
-                                    address: e.target.address.value,
-                                };
-                                handleAdoptionSubmit(formData);
-                            }}
-                        >
-                            <div className="modal-info">
-                                <img src={selectedPet.image} alt={selectedPet.name} />
-                                <p>Pet ID: {selectedPet.id}</p>
-                                <p>Name: {selectedPet.name}</p>
-                                <p>User Name: {user.name}</p>
-                                <p>Email: {user.email}</p>
-                            </div>
-                            <input
-                                type="tel"
-                                name="phone"
-                                placeholder="Phone Number"
-                                required
-                            />
-                            <textarea
-                                name="address"
-                                placeholder="Address"
-                                required
-                            />
-                            <div className="modal-actions">
-                                <button type="submit">Submit</button>
-                                <button type="button" onClick={() => setSelectedPet(null)}>
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
-export default Petlist;
+export default PetList;
