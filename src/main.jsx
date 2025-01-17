@@ -17,6 +17,7 @@ import AddPet from './Components/AddPet';
 import PetDetails from './Components/PetDetails';
 import Donation from './Components/Donation';
 import UserDashboard from './Components/UserDashboard';
+import MyAddedPets from './Components/MyAddedPets';
 
 
 // Initialize QueryClient for react-query
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
       {
         path: "/user-dashboard",
         element: <UserDashboard></UserDashboard>
+      },
+      {
+        path: "/my-added-pets",
+        element: <MyAddedPets></MyAddedPets>
       },
     ],
   },

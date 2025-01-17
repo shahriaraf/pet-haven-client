@@ -49,7 +49,7 @@ const Donation = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6 pt-36">
-      <h1 className="text-3xl font-bold text-center mb-12">Donation Campaigns</h1>
+      <h1 className="text-3xl font-bold text-[#6d165D] text-center mb-12">Donation Campaigns</h1>
 
       {/* Campaign Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
