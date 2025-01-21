@@ -9,9 +9,8 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
-
-import axios from "axios";
 import auth from "../../firebase/firebase.init";
+import AxiosPublic from "../Hooks/axiosPublic";
 
 // Context to provide user state and auth functions
 export const AuthContext = createContext(null);
@@ -20,6 +19,7 @@ const Authprovider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null); // Error state for handling authentication errors
+  const axiosPublic = AxiosPublic();
 
   // Function to create a new user
   const createUser = async (email, password, name, photoURL) => {
@@ -54,11 +54,7 @@ const Authprovider = ({ children }) => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       setUser(user); // Update the user state after successful sign-in
-  
-      // Create JWT token by sending user email to backend
-      const response = await axios.post('https://assignment-11-server-jet-one.vercel.app/jwt', { email: email }, { withCredentials: true });
-      console.log('JWT token:', response.data);
-  
+
       return user; // Return user object after successful sign-in
     } catch (error) {
       console.error("Error signing in:", error);
@@ -104,11 +100,20 @@ const Authprovider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser); // Update the user state when the auth state changes
-      setLoading(false);    // Set loading to false after checking auth state
+      setLoading(false);
+      if(currentUser){
+        const userInfo = {email: currentUser.email};
+        axiosPublic.post('/jwt', userInfo)
+        .then(res => {
+          if(res.data.token){
+            localStorage.setItem('access-token', res.data.token);
+          }
+        })
+      }
     });
   
     return () => unsubscribe(); // Cleanup the listener on unmount
-  }, []);
+  }, [axiosPublic]);
   
   if (loading) {
     return <div>Loading...</div>; // Display a loading indicator while checking auth state

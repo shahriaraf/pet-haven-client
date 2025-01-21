@@ -1,12 +1,14 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "./Provider/Authprovider";
+import AxiosPublic from "./Hooks/axiosPublic";
 
 const Register = () => {
   const { createUser, signInWithGoogle } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
+  const axiosPublic = AxiosPublic();
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -33,11 +35,34 @@ const Register = () => {
       return;
     }
 
-    createUser(email, password, name, photo)
-      .then(() => {
-        setSuccessMessage("Registration successful! Please log in.");
-        navigate("/");
-        e.target.reset();
+    createUser(email, password)
+      .then((result) => {
+        const loggedUser = result.user;
+        console.log(loggedUser);
+
+        // Create user entry in the database
+        const userInfo = {
+          name: name,
+          email: email,
+          photo: photo,
+        };
+
+        axiosPublic
+          .post("/users", userInfo)
+          .then((res) => {
+            if (res.data.insertedId) {
+              console.log("User added to the database");
+              setSuccessMessage("Account created successfully!");
+              e.target.reset();
+              navigate("/");
+            } else if (res.data.message === "User already exists") {
+              setError("User already exists in the database.");
+            }
+          })
+          .catch((err) => {
+            console.error("Error adding user to the database:", err);
+            setError("Failed to save user information. Please try again.");
+          });
       })
       .catch((err) => {
         console.error("Error creating user:", err);
@@ -45,15 +70,22 @@ const Register = () => {
       });
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await signInWithGoogle();
-      navigate("/");
-    } catch (err) {
-      console.error("Google sign-in failed:", err);
-      setError("Failed to authenticate with Google. Please try again.");
-    }
-  };
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+    .then(result => {
+        console.log(result.user);
+        const userInfo = {
+            email: result.user?.email,
+            name: result.user?.displayName
+        }
+        axiosPublic.post('/users', userInfo)
+        .then(res => {
+            console.log(res.data);
+            navigate("/");
+        });
+
+    });
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white pt-36 pb-20">
@@ -65,7 +97,11 @@ const Register = () => {
             alt="petHaven Logo"
           />
         </div>
-        <p className="mt-2 text-center">Join Pet<span className="text-[#ECA511] font-semibold">H</span>aven and make a difference!</p>
+        <p className="mt-2 text-center">
+          Join Pet
+          <span className="text-[#ECA511] font-semibold">H</span>aven and make
+          a difference!
+        </p>
 
         {error && <p className="text-red-500 text-center">{error}</p>}
         {successMessage && (
@@ -171,7 +207,7 @@ const Register = () => {
             onClick={handleGoogleSignIn}
             className="w-full bg-white hover:bg-gray-300 text-[#6d165D] transition-colors py-3 rounded-lg font-semibold shadow-md"
           >
-            Sign in with Google <i className="fa-brands fa-google"></i>
+            Sign in with Google 
           </button>
         </div>
       </div>

@@ -2,10 +2,12 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "./Provider/Authprovider";
+import AxiosPublic from "./Hooks/axiosPublic";
 
 const Login = () => {
     const { signInUser, error, signInWithGoogle } = useContext(AuthContext);
     const navigate = useNavigate();
+    const axiosPublic = AxiosPublic();
 
     const {
         register,
@@ -23,13 +25,21 @@ const Login = () => {
         }
     };
 
-    const handleGoogleSignIn = async () => {
-        try {
-            await signInWithGoogle();
-            navigate("/");
-        } catch (error) {
-            console.error("Google sign-in failed:", error);
-        }
+    const handleGoogleSignIn = () => {
+        signInWithGoogle()
+        .then(result => {
+            console.log(result.user);
+            const userInfo = {
+                email: result.user?.email,
+                name: result.user?.displayName
+            }
+            axiosPublic.post('/users', userInfo)
+            .then(res => {
+                console.log(res.data);
+                navigate("/");
+            })
+
+        })
     };
 
     return (

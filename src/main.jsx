@@ -4,6 +4,7 @@ import './index.css';
 import {
   createBrowserRouter,
   RouterProvider,
+  Outlet,
 } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Home from './Components/Home/Home';
@@ -18,7 +19,7 @@ import PetDetails from './Components/PetDetails';
 import Donation from './Components/Donation';
 import UserDashboard from './Components/UserDashboard';
 import MyAddedPets from './Components/MyAddedPets';
-
+import AllUsers from './Components/AllUsers';
 
 // Initialize QueryClient for react-query
 const queryClient = new QueryClient({
@@ -54,29 +55,37 @@ const router = createBrowserRouter([
       },
       {
         path: '/petlist',
-        element: <Petlist></Petlist>
+        element: <Petlist />,
       },
       {
         path: '/add-pet',
-        element: <AddPet></AddPet>
+        element: <AddPet />,
       },
       {
-        path: "pets/:id",
-        element: <PetDetails></PetDetails>
+        path: 'pets/:id',
+        element: <PetDetails />,
       },
       {
-        path: "/donation",
-        element: <Donation></Donation>
+        path: '/donation',
+        element: <Donation />,
       },
       {
-        path: "/user-dashboard",
-        element: <UserDashboard></UserDashboard>
-      },
-      {
-        path: "/my-added-pets",
-        element: <MyAddedPets></MyAddedPets>
+        path: '/user-dashboard',
+        element: <UserDashboard />, // Main Dashboard Component
+        errorElement: <Errorpage />, // Fallback for route errors
+        children: [
+          {
+            path: 'my-added-pets', // Relative path
+            element: <MyAddedPets />,
+          },
+          {
+            path: 'all-users', // Relative path
+            element: <AllUsers />,
+          },
+        ],
       },
     ],
+    
   },
   {
     path: '*',
