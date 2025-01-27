@@ -1,177 +1,168 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import AxiosPublic from "./Hooks/axiosPublic";
+import { AuthContext } from "./Provider/Authprovider";
+
+const imageHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const imageHostingAPI = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`;
 
 const CreateDonationCampaign = () => {
-  // State for form fields
-  const [formData, setFormData] = useState({
-    petPicture: null,
-    maxDonationAmount: "",
-    lastDate: "",
-    shortDescription: "",
-    longDescription: "",
-  });
+  const { register, handleSubmit, reset } = useForm();
+  const [imageUrl, setImageUrl] = useState("");
+  const axiosPublic = AxiosPublic();
+  const { user } = useContext(AuthContext);
 
-  const [uploading, setUploading] = useState(false);
+  const handleFileUpload = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
 
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  // Handle file input change
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, petPicture: e.target.files[0] });
-  };
-
-  // Upload image to Cloudinary
-  const uploadImage = async () => {
-    if (!formData.petPicture) return null;
-
-    const cloudinaryUrl = "https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload";
-    const uploadPreset = "YOUR_UPLOAD_PRESET";
-
-    const formDataToUpload = new FormData();
-    formDataToUpload.append("file", formData.petPicture);
-    formDataToUpload.append("upload_preset", uploadPreset);
-
-    setUploading(true);
     try {
-      const response = await axios.post(cloudinaryUrl, formDataToUpload);
-      setUploading(false);
-      return response.data.secure_url; // URL of the uploaded image
+      const response = await axiosPublic.post(imageHostingAPI, formData);
+      setImageUrl(response.data.data.display_url);
     } catch (error) {
-      setUploading(false);
-      console.error("Image upload failed:", error);
-      return null;
+      console.error("Image upload failed", error);
     }
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Upload image to Cloudinary
-    const petPictureUrl = await uploadImage();
-
-    if (!petPictureUrl) {
-      alert("Failed to upload the image. Please try again.");
+  const onSubmit = async (data) => {
+    if (!imageUrl) {
+      alert("Please upload a pet image!");
       return;
     }
 
-    // Add date and time of creation
-    const createdAt = new Date().toISOString();
-
-    // Data to send to the database
-    const donationData = {
-      petPicture: petPictureUrl,
-      maxDonationAmount: formData.maxDonationAmount,
-      lastDate: formData.lastDate,
-      shortDescription: formData.shortDescription,
-      longDescription: formData.longDescription,
-      createdAt,
-    };
-
-    // Send data to the database
     try {
-      const response = await axios.post("http://localhost:5000/create-donation-campaigns", donationData);
-      alert("Donation campaign created successfully!");
-      console.log("Response:", response.data);
-      setFormData({
-        petPicture: null,
-        maxDonationAmount: "",
-        lastDate: "",
-        shortDescription: "",
-        longDescription: "",
-      });
+      const campaignData = {
+        petName: data.petName,
+        petPicture: imageUrl,
+        maxDonationAmount: parseFloat(data.maxDonationAmount),
+        lastDate: new Date(data.lastDate),
+        shortDescription: data.shortDescription,
+        longDescription: data.longDescription,
+        userEmail: user.email
+      };
+
+      const response = await fetch(
+        "https://pet-haven-server-sigma.vercel.app/create-donation-campaigns",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(campaignData),
+        }
+      );
+
+      if (response.ok) {
+        alert("Donation campaign created successfully!");
+        reset();
+        setImageUrl("");
+      } else {
+        const result = await response.json();
+        alert(result.error || "Failed to create donation campaign.");
+      }
     } catch (error) {
-      console.error("Failed to create donation campaign:", error);
-      alert("Something went wrong. Please try again.");
+      console.error("Error creating donation campaign:", error);
+      alert("Failed to create donation campaign. Please try again.");
     }
   };
 
   return (
-    <div className="p-6 bg-gray-100 shadow rounded-lg">
-      <h2 className="text-xl font-bold mb-4" style={{ color: "#6d165D" }}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="max-w-4xl mx-auto p-8 mt-10 mb-8 bg-slate-100 shadow-lg shadow-gray-400 text-black rounded-lg"
+    >
+      {/* Pet Picture */}
+      <div className="mb-6">
+        <label className="block text-lg font-semibold mb-2">Pet Picture:</label>
+        <input
+          type="file"
+          onChange={(e) => handleFileUpload(e.target.files[0])}
+          className="w-full px-4 py-2 border bg-white border-gray-300 rounded-lg text-black"
+        />
+        {imageUrl && (
+          <p className="text-green-600 mt-2">Image uploaded successfully!</p>
+        )}
+      </div>
+
+      {/* Maximum Donation Amount */}
+      <div className="mb-6">
+        <label className="block text-lg font-semibold mb-2">
+          Maximum Donation Amount:
+        </label>
+        <input
+          type="number"
+          {...register("maxDonationAmount", { required: true })}
+          placeholder="Maximum Donation Amount"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+        />
+      </div>
+      {/* Pet Name */}
+      <div className="mb-6">
+        <label className="block text-lg font-semibold mb-2">Pet Name:</label>
+        <input
+          type="text"
+          {...register("petName", { required: true })}
+          placeholder="Enter the pet's name"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+        />
+      </div>
+
+
+      {/* Last Date of Donation */}
+      <div className="mb-6">
+        <label className="block text-lg font-semibold mb-2">
+          Last Date of Donation:
+        </label>
+        <input
+          type="date"
+          {...register("lastDate", { required: true })}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+        />
+      </div>
+
+      {/* Short Description */}
+      <div className="mb-6">
+        <label className="block text-lg font-semibold mb-2">
+          Short Description:
+        </label>
+        <input
+          type="text"
+          {...register("shortDescription", { required: true })}
+          placeholder="Short Description"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+        />
+      </div>
+
+      {/* Long Description */}
+      <div className="mb-6">
+        <label className="block text-lg font-semibold mb-2">
+          Long Description:
+        </label>
+        <textarea
+          {...register("longDescription", { required: true })}
+          placeholder="Long Description"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+        ></textarea>
+      </div>
+      <div className="mb-6">
+        <label className="block text-lg font-semibold mb-2">
+          Email:
+        </label>
+        <input
+          type="email"
+          value={user.email}
+          disabled
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="w-full py-3 px-6 bg-[#ECA511] text-[#6d165D] font-semibold rounded-lg hover:bg-[#6d165D] hover:text-[#ECA511] transition duration-300"
+      >
         Create Donation Campaign
-      </h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Pet Picture */}
-        <div>
-          <label className="block mb-2 font-semibold">Pet Picture</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="w-full border border-gray-300 rounded p-2"
-          />
-        </div>
-
-        {/* Maximum Donation Amount */}
-        <div>
-          <label className="block mb-2 font-semibold">Maximum Donation Amount</label>
-          <input
-            type="number"
-            name="maxDonationAmount"
-            value={formData.maxDonationAmount}
-            onChange={handleChange}
-            placeholder="Enter maximum amount"
-            className="w-full border border-gray-300 rounded p-2"
-            required
-          />
-        </div>
-
-        {/* Last Date */}
-        <div>
-          <label className="block mb-2 font-semibold">Last Date of Donation</label>
-          <input
-            type="date"
-            name="lastDate"
-            value={formData.lastDate}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded p-2"
-            required
-          />
-        </div>
-
-        {/* Short Description */}
-        <div>
-          <label className="block mb-2 font-semibold">Short Description</label>
-          <textarea
-            name="shortDescription"
-            value={formData.shortDescription}
-            onChange={handleChange}
-            placeholder="Enter a short description"
-            className="w-full border border-gray-300 rounded p-2"
-            required
-          />
-        </div>
-
-        {/* Long Description */}
-        <div>
-          <label className="block mb-2 font-semibold">Long Description</label>
-          <textarea
-            name="longDescription"
-            value={formData.longDescription}
-            onChange={handleChange}
-            placeholder="Enter a detailed description"
-            className="w-full border border-gray-300 rounded p-2"
-            required
-          />
-        </div>
-
-        {/* Submit Button */}
-        <div>
-          <button
-            type="submit"
-            disabled={uploading}
-            className="bg-[#6d165D] text-white px-4 py-2 rounded hover:bg-[#ECA511] transition"
-          >
-            {uploading ? "Uploading..." : "Create Campaign"}
-          </button>
-        </div>
-      </form>
-    </div>
+      </button>
+    </form>
   );
 };
 

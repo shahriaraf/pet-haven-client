@@ -1,127 +1,113 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
+import AxiosSecure from './Hooks/AxiosSecure';
+import { AuthContext } from './Provider/Authprovider';
 
 const MyAddedPets = () => {
   const [pets, setPets] = useState([]);
-  const [sortedPets, setSortedPets] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(10);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const axiosSecure = AxiosSecure();
+  const { user } = useContext(AuthContext);
+
+  const fetchPets = async () => {
+    try {
+      const response = await axiosSecure.get('/user/pets', {
+        params: { email: user.email },
+      });
+      setPets(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching pets:', error);
+      Swal.fire('Error', 'Failed to fetch pets. Please try again.', 'error');
+    }
+  };
 
   useEffect(() => {
-    const fetchPets = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/pets'); // Get pets from your backend
-        setPets(response.data);
-        setSortedPets(response.data);
-      } catch (error) {
-        console.error('Failed to fetch pets:', error);
-      }
-    };
-
     fetchPets();
   }, []);
 
-  const handleSort = (column) => {
-    const sorted = [...sortedPets].sort((a, b) => {
-      if (a[column] < b[column]) return -1;
-      if (a[column] > b[column]) return 1;
-      return 0;
-    });
-    setSortedPets(sorted);
-  };
-
-  const handleUpdate = (petId) => {
-    navigate(`/update-pet/${petId}`);
-  };
-
-  const handleDelete = (petId) => {
+  const handleDelete = async (id) => {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'You won\'t be able to revert this!',
+      text: 'This action will permanently delete the pet.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`http://localhost:5000/pets/${petId}`);
-          Swal.fire('Deleted!', 'Your pet has been deleted.', 'success');
-          setPets(pets.filter((pet) => pet._id !== petId)); // Remove pet from the list
-          setSortedPets(sortedPets.filter((pet) => pet._id !== petId)); // Remove pet from the sorted list
+          await axiosSecure.delete(`/pets/${id}`);
+          Swal.fire('Deleted!', 'Pet has been deleted.', 'success');
+          fetchPets();
         } catch (error) {
-          Swal.fire('Error!', 'Failed to delete the pet.', 'error');
+          Swal.fire('Error', 'Failed to delete pet. Please try again.', 'error');
         }
       }
     });
   };
 
-  const handleAdopt = async (petId) => {
+  const handleAdopt = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/pets/${petId}`, { adopted: true });
-      setPets(pets.map((pet) => (pet._id === petId ? { ...pet, adopted: true } : pet)));
-      setSortedPets(sortedPets.map((pet) => (pet._id === petId ? { ...pet, adopted: true } : pet)));
+      await axiosSecure.patch(`/pets/${id}/adopted`);
+      Swal.fire('Success', 'Pet marked as adopted.', 'success');
+      fetchPets();
     } catch (error) {
-      console.error('Failed to update adoption status:', error);
+      Swal.fire('Error', 'Failed to mark pet as adopted. Please try again.', 'error');
     }
   };
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handleUpdate = (id) => {
+    window.location.href = `/update-pet/${id}`;
   };
 
-  const indexOfLastPet = currentPage * pageSize;
-  const indexOfFirstPet = indexOfLastPet - pageSize;
-  const currentPets = sortedPets.slice(indexOfFirstPet, indexOfLastPet);
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(sortedPets.length / pageSize); i++) {
-    pageNumbers.push(i);
-  }
+  if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="container mx-auto p-6 pt-36">
-      <table className="min-w-full bg-white border border-gray-300 shadow-md rounded-lg">
-        <thead>
+    <div>
+      <h1 className="text-2xl font-bold mb-4">My Pets</h1>
+      <table className="table-auto w-full border-collapse border border-gray-300 shadow-lg">
+        <thead className="bg-gray-200">
           <tr>
-            <th onClick={() => handleSort('petName')} className="cursor-pointer px-4 py-2">Serial Number</th>
-            <th onClick={() => handleSort('petName')} className="cursor-pointer px-4 py-2">Pet Name</th>
-            <th onClick={() => handleSort('petCategory')} className="cursor-pointer px-4 py-2">Pet Category</th>
-            <th className="cursor-pointer px-4 py-2">Pet Image</th>
-            <th onClick={() => handleSort('adopted')} className="cursor-pointer px-4 py-2">Adoption Status</th>
-            <th className="cursor-pointer px-4 py-2">Actions</th>
+            <th className="border px-4 py-2">Serial No</th>
+            <th className="border px-4 py-2">Pet Name</th>
+            <th className="border px-4 py-2">Category</th>
+            <th className="border px-4 py-2">Image</th>
+            <th className="border px-4 py-2">Adoption Status</th>
+            <th className="border px-4 py-2">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {currentPets.map((pet, index) => (
-            <tr key={pet._id} className="border-b">
-              <td className="px-4 py-2">{indexOfFirstPet + index + 1}</td>
-              <td className="px-4 py-2">{pet.petName}</td>
-              <td className="px-4 py-2">{pet.petCategory}</td>
-              <td className="px-4 py-2">
-                <img src={pet.petImage} alt={pet.petName} className="w-16 h-16 object-cover rounded-full" />
+          {pets.map((pet, index) => (
+            <tr key={pet._id} className="hover:bg-gray-100">
+              <td className="border px-4 py-2 text-center">{index + 1}</td>
+              <td className="border px-4 py-2">{pet.petName}</td>
+              <td className="border px-4 py-2">{pet.petCategory}</td>
+              <td className="border px-4 py-2">
+                <img src={pet.petImage} alt={pet.petName} className="h-16 w-16 object-cover rounded-md" />
               </td>
-              <td className="px-4 py-2">
+              <td className="border px-4 py-2 text-center">
                 {pet.adopted ? 'Adopted' : 'Not Adopted'}
               </td>
-              <td className="px-4 py-2">
+              <td className="border px-4 py-2 space-x-2 flex justify-center">
                 <button
+                  className="bg-blue-500 text-white px-3 py-1 rounded"
                   onClick={() => handleUpdate(pet._id)}
-                  className="px-3 py-1 bg-blue-500 text-white rounded mr-2"
                 >
                   Update
                 </button>
                 <button
+                  className="bg-red-500 text-white px-3 py-1 rounded"
                   onClick={() => handleDelete(pet._id)}
-                  className="px-3 py-1 bg-red-500 text-white rounded mr-2"
                 >
                   Delete
                 </button>
                 <button
+                  className={`${
+                    pet.adopted ? 'bg-gray-500' : 'bg-green-500'
+                  } text-white px-3 py-1 rounded`}
                   onClick={() => handleAdopt(pet._id)}
-                  className="px-3 py-1 bg-green-500 text-white rounded"
+                  disabled={pet.adopted}
                 >
                   {pet.adopted ? 'Adopted' : 'Adopt'}
                 </button>
@@ -130,22 +116,6 @@ const MyAddedPets = () => {
           ))}
         </tbody>
       </table>
-
-      {sortedPets.length > 10 && (
-        <div className="mt-4 flex justify-center">
-          <ul className="flex space-x-4">
-            {pageNumbers.map((number) => (
-              <li
-                key={number}
-                onClick={() => handlePageChange(number)}
-                className={`cursor-pointer px-4 py-2 ${currentPage === number ? 'bg-[#6d165D] text-white' : 'bg-gray-200'}`}
-              >
-                {number}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 };

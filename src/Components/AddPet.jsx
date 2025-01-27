@@ -1,10 +1,20 @@
-import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
 import Select from "react-select";
-import axios from "axios";
+
+
+import AxiosPublic from "./Hooks/axiosPublic";
+import { AuthContext } from "./Provider/Authprovider";
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const AddPet = () => {
+  const { register, handleSubmit, setValue, reset } = useForm();
   const [imageUrl, setImageUrl] = useState("");
+  const axiosPublic = AxiosPublic();
+  const { user } = useContext(AuthContext);
+  console.log(user);
+
   const petCategories = [
     { value: "dog", label: "Dog" },
     { value: "cat", label: "Cat" },
@@ -13,19 +23,15 @@ const AddPet = () => {
     { value: "other", label: "Other" },
   ];
 
-  const { control, handleSubmit, formState: { errors }, setValue } = useForm();
-
   const handleFileUpload = async (file) => {
     const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "your_upload_preset");
+    formData.append("image", file);
 
     try {
-      const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload",
+      const response = await axiosPublic.post(image_hosting_api,
         formData
       );
-      setImageUrl(response.data.secure_url);
+      setImageUrl(response.data.data.display_url);
     } catch (error) {
       console.error("Image upload failed", error);
     }
@@ -38,30 +44,33 @@ const AddPet = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/add-pet", {
+      const petData = {
+        petImage: imageUrl,
+        petName: data.petName,
+        userEmail: user.email,
+        petAge: data.petAge,
+        petLocation: data.petLocation,
+        petCategory: data.petCategory.value,
+        shortDescription: data.shortDescription,
+        longDescription: data.longDescription,
+
+      };
+
+      const response = await fetch("https://pet-haven-server-sigma.vercel.app/add-pet", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          ...data,
-          petCategory: data.petCategory.value,
-          petImage: imageUrl,
-        }),
+        body: JSON.stringify(petData),
       });
-
-      const result = await response.json();
 
       if (response.ok) {
         alert("Pet added successfully!");
-        setValue("petName", "");
-        setValue("petAge", "");
-        setValue("petLocation", "");
-        setValue("shortDescription", "");
-        setValue("longDescription", "");
+        reset();
         setImageUrl("");
       } else {
-        alert(result.error || "Failed to add pet. Please try again.");
+        const result = await response.json();
+        alert(result.error || "Failed to add pet.");
       }
     } catch (error) {
       console.error("Error adding pet:", error);
@@ -70,123 +79,108 @@ const AddPet = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto p-8 mt-36 mb-8 bg-[#6d165D] text-white shadow-lg rounded-lg">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="max-w-4xl mx-auto p-8 mt-10 mb-8 bg-slate-100 shadow-lg shadow-gray-400 text-black rounded-lg"
+    >
+
       <div className="mb-6">
         <label className="block text-lg font-semibold mb-2">Pet Image:</label>
         <input
           type="file"
           onChange={(e) => handleFileUpload(e.target.files[0])}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+          className="w-full px-4 py-2 border bg-white border-gray-300 rounded-lg text-black"
         />
-        {imageUrl && <p className="text-green-600 mt-2">Image uploaded successfully!</p>}
+        {imageUrl && (
+          <p className="text-green-600 mt-2">Image uploaded successfully!</p>
+        )}
+      </div>
+
+      <div className="flex gap-6 mb-6">
+        {/* Pet Name */}
+        <div className="w-1/2">
+          <label className="block text-lg font-semibold mb-2">Pet Name:</label>
+          <input
+            type="text"
+            {...register("petName", { required: true })}
+            placeholder="Pet Name"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+          />
+        </div>
+        <div className="w-1/2">
+          <label className="block text-lg font-semibold mb-2">Email:</label>
+          <input
+            value={user.email}
+            type="email"
+            disabled
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+          />
+        </div>
+
+        {/* Pet Age */}
+        <div className="w-1/2">
+          <label className="block text-lg font-semibold mb-2">Pet Age:</label>
+          <input
+            type="text"
+            {...register("petAge", { required: true })}
+            placeholder="Pet Age"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+          />
+        </div>
+      </div>
+
+      <div className="flex gap-6 mb-6">
+        {/* Pet Category */}
+        <div className="w-1/2">
+          <label className="block text-lg font-semibold mb-2">Pet Category:</label>
+          <Select
+            options={petCategories}
+            onChange={(option) => setValue("petCategory", option)}
+            className="w-full border border-gray-300 rounded-lg text-black"
+          />
+        </div>
+
+        {/* Pet Location */}
+        <div className="w-1/2">
+          <label className="block text-lg font-semibold mb-2">Pet Location:</label>
+          <input
+            type="text"
+            {...register("petLocation", { required: true })}
+            placeholder="Pet Location"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+          />
+        </div>
+      </div>
+
+
+      <div className="mb-6">
+        <label className="block text-lg font-semibold mb-2">
+          Short Description:
+        </label>
+        <input
+          type="text"
+          {...register("shortDescription", { required: true })}
+          placeholder="Short Description"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+        />
       </div>
 
       <div className="mb-6">
-        <label className="block text-lg font-semibold mb-2">Pet Name:</label>
-        <Controller
-          name="petName"
-          control={control}
-          render={({ field }) => (
-            <input
-              {...field}
-              type="text"
-              placeholder="Pet Name"
-              className="w-full px-4 py-2 border text-black border-gray-300 rounded-lg"
-            />
-          )}
-        />
-        {errors.petName && <p className="text-red-500 mt-1 text-sm">{errors.petName.message}</p>}
-      </div>
-
-      <div className="mb-6">
-        <label className="block text-lg font-semibold mb-2">Pet Age:</label>
-        <Controller
-          name="petAge"
-          control={control}
-          render={({ field }) => (
-            <input
-              {...field}
-              type="text"
-              placeholder="Pet Age"
-              className="w-full px-4 text-black py-2 border border-gray-300 rounded-lg"
-            />
-          )}
-        />
-        {errors.petAge && <p className="text-red-500 mt-1 text-sm">{errors.petAge.message}</p>}
-      </div>
-
-      <div className="mb-6">
-        <label className="block text-lg font-semibold mb-2">Pet Category:</label>
-        <Controller
-          name="petCategory"
-          control={control}
-          render={({ field }) => (
-            <Select
-              {...field}
-              options={petCategories}
-              onChange={(option) => setValue("petCategory", option)}
-              className="w-full border text-black border-gray-300 rounded-lg"
-            />
-          )}
-        />
-        {errors.petCategory && <p className="text-red-500 mt-1 text-sm">{errors.petCategory.message}</p>}
-      </div>
-
-      <div className="mb-6">
-        <label className="block text-lg font-semibold mb-2">Pet Location:</label>
-        <Controller
-          name="petLocation"
-          control={control}
-          render={({ field }) => (
-            <input
-              {...field}
-              type="text"
-              placeholder="Pet Location"
-              className="w-full px-4 py-2 text-black border border-gray-300 rounded-lg"
-            />
-          )}
-        />
-        {errors.petLocation && <p className="text-red-500 mt-1 text-sm">{errors.petLocation.message}</p>}
-      </div>
-
-      <div className="mb-6">
-        <label className="block text-lg font-semibold mb-2">Short Description:</label>
-        <Controller
-          name="shortDescription"
-          control={control}
-          render={({ field }) => (
-            <input
-              {...field}
-              type="text"
-              placeholder="Short Description About Pet"
-              className="w-full px-4 py-2 text-black border border-gray-300 rounded-lg"
-            />
-          )}
-        />
-        {errors.shortDescription && <p className="text-red-500 mt-1 text-sm">{errors.shortDescription.message}</p>}
-      </div>
-
-      <div className="mb-6">
-        <label className="block text-lg font-semibold mb-2">Long Description:</label>
-        <Controller
-          name="longDescription"
-          control={control}
-          render={({ field }) => (
-            <textarea
-              {...field}
-              placeholder="Long Description About Pet"
-              className="w-full px-4 py-2 text-black border border-gray-300 rounded-lg"
-            />
-          )}
-        />
-        {errors.longDescription && <p className="text-red-500 mt-1 text-sm">{errors.longDescription.message}</p>}
+        <label className="block text-lg font-semibold mb-2">
+          Long Description:
+        </label>
+        <textarea
+          {...register("longDescription", { required: true })}
+          placeholder="Long Description"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
+        ></textarea>
       </div>
 
       <button
         type="submit"
-        className="w-full py-3 px-6 bg-[#ECA511] text-[#6d165D] hover:text-[#ECA511] font-semibold rounded-lg hover:bg-[#440a39] transition duration-300"
+        className="w-full py-3 px-6 bg-[#ECA511] text-[#6d165D] font-semibold rounded-lg hover:bg-[#6d165D] hover:text-[#ECA511] transition duration-300"
       >
-        {errors ? "Submitting..." : "Add Pet"}
+        Add Pet
       </button>
     </form>
   );

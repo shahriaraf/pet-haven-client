@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const Donation = () => {
@@ -10,7 +10,7 @@ const Donation = () => {
   const fetchCampaigns = async (page) => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:5000/donation-campaigns?page=${page}`);
+      const response = await fetch(`https://pet-haven-server-sigma.vercel.app/donation-campaigns?page=${page}`);
       const data = await response.json();
 
       if (data.length === 0) {
@@ -53,13 +53,13 @@ const Donation = () => {
 
       {/* Campaign Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {campaigns.map((campaign) => (
+        {campaigns.map((campaign, index) => (
           <div
-            key={campaign._id}
+            key={index}
             className="bg-slate-100 shadow-lg shadow-gray-400 rounded-lg overflow-hidden"
           >
             <img
-              src={campaign.petImage}
+              src={campaign.petPicture}
               alt={campaign.petName}
               className="w-full h-72 object-cover"
             />
@@ -72,7 +72,7 @@ const Donation = () => {
                 <strong>Donated:</strong> ${campaign.donatedAmount}
               </p>
               <div className="mt-4">
-                <Link to={`/campaigns/${campaign._id}`}>
+                <Link to={`/donation-details/${campaign._id}`}>
                   <button className="w-full py-2 bg-[#6d165D] text-white rounded-lg hover:text-[#6d165D] hover:bg-[#ECA511] transition duration-300">
                     View Details
                   </button>

@@ -1,72 +1,39 @@
-import { useState, useEffect } from "react";
-
-const movies = [
-  {
-    title: "Barger",
-    image: "https://i.ibb.co.com/7YJ2sVw/images-27.jpg",
-  },
-  {
-    title: "Pasta",
-    image: "https://i.ibb.co.com/0KWLgj5/610x350-Photo-4-862-How-to-Make-CHICKEN-PASTA-Like-an-Italian-V1.jpg",
-  },
-  {
-    title: "Grilled Chicken",
-    image: "https://i.ibb.co.com/sCZZZzq/Grilled-Chicken-Recipe-5-1200.jpg",
-  },
-  {
-    title: "Pizza",
-    image: "https://i.ibb.co.com/k5X1Bww/images-28.jpg",
-  },
-];
+import Lottie from "lottie-react";
+import familyWithPets from "./familyWithPets.json";
+import './style.css'
 
 const Banner = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
-    }, 3000); // Change slides every 5 seconds
-
-    return () => clearInterval(interval); // Cleanup interval on unmount
-  }, []);
-
   return (
-    <div className="relative w-full pt-16 mx-auto overflow-hidden shadow-lg">
-      {/* Slider */}
-      <div
-        className="flex transition-transform duration-700"
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-      >
-        {movies.map((movie, index) => (
-          <div
-            key={index}
-            className="flex-none w-full relative bg-gray-900 text-white"
-            style={{ height: "90vh" }} // Default height for larger screens
-          >
-            {/* Movie Image */}
-            <img
-              src={movie.image}
-              alt={movie.title}
-              className="w-full h-full object-cover "
-            />
-            {/* Movie Details */}
-            <div className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black/80 to-transparent">
-              <h2 className="text-xl md:text-3xl font-bold">{movie.title}</h2>
-            </div>
-          </div>
-        ))}
+    <div
+      className="relative w-full pt-16 mx-auto shadow-lg flex items-center justify-between bg-cover bg-center"
+      style={{
+        height: "90vh",
+        backgroundImage: "url('https://i.ibb.co.com/wgHfmZV/photo-1571325654970-9c00c5432fcb-1.jpg')", // Replace with your background image URL
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundBlendMode: "overlay",
+        backgroundColor: "rgba(0,0,0,0.6)", // Slight overlay for better text visibility
+      }}
+    >
+      {/* Left Section: Welcome Message */}
+      <div className="w-1/2 pl-10 pr-5 text-white z-10 space-y-6">
+        <h1 className="text-5xl md:text-7xl font-bold leading-tight animate-fadeIn">
+          Welcome to <span className="text-yellow-500">Pet Haven</span>
+        </h1>
+        <p className="text-xl md:text-2xl leading-relaxed animate-fadeIn delay-200">
+          Find your perfect companion and give a loving home to a pet in need.
+        </p>
+        <button className="px-6 py-3 bg-yellow-500 hover:bg-yellow-400 text-lg font-semibold rounded-full shadow-lg animate-fadeIn delay-400">
+          Get Started
+        </button>
       </div>
 
-      {/* Dots */}
-      <div className="absolute bottom-2 md:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {movies.map((_, index) => (
-          <div
-            key={index}
-            className={`w-2 h-2 md:w-3 md:h-3 rounded-full ${
-              index === currentIndex ? "bg-white" : "bg-white/50"
-            }`}
-          ></div>
-        ))}
+      {/* Right Section: Lottie Animation */}
+      <div className="w-1/2 flex justify-center items-center">
+        <Lottie
+          animationData={familyWithPets}
+          className="w-full max-w-lg h-auto animate-slideIn"
+        />
       </div>
     </div>
   );

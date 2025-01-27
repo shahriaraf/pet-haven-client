@@ -61,7 +61,7 @@ const Navbar = () => {
                   <ul className="space-y-2">
                     <li>
                       <Link
-                        to="/user-dashboard"
+                        to="/dashboard"
                         className="block px-4 py-2 text-sm bg-[#ECA511] font-semibold hover:bg-[#ad7804] rounded-lg"
                       >
                         Dashboard
