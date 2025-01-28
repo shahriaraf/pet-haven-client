@@ -30,6 +30,7 @@ import AdoptionRequests from './Components/AdoptionRequests';
 import EditDonation from './Components/EditDonation';
 import EditPet from './Components/EditPet';
 import Payment from './Components/Payment/Payment';
+import PrivateRoute from './Components/Privateroute';
 
 
 // Initialize QueryClient for react-query
@@ -74,7 +75,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'pets/:id',
-        element: <PetDetails />,
+        element: <PrivateRoute><PetDetails></PetDetails></PrivateRoute>,
       },
       {
         path: 'update-pet/:id',
@@ -82,7 +83,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'donation-details/:id',
-        element: <DonationDetails></DonationDetails>,
+        element: <PrivateRoute><DonationDetails></DonationDetails></PrivateRoute>,
       },
       {
         path: '/donation',
