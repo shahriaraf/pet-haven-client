@@ -69,7 +69,7 @@ const CreateDonationCampaign = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-4xl mx-auto p-8 mt-10 mb-8 bg-slate-100 shadow-lg shadow-gray-400 text-black rounded-lg"
+      className="md:max-w-4xl max-w-[330px] mx-auto p-8 mt-10 mb-8 bg-slate-100 shadow-lg shadow-gray-400 text-black rounded-lg"
     >
       {/* Pet Picture */}
       <div className="mb-6">

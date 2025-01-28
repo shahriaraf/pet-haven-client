@@ -4,7 +4,6 @@ import './index.css';
 import {
   createBrowserRouter,
   RouterProvider,
-  Outlet,
 } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Home from './Components/Home/Home';
@@ -30,6 +29,7 @@ import DonationDetails from './Components/DonationDetails';
 import AdoptionRequests from './Components/AdoptionRequests';
 import EditDonation from './Components/EditDonation';
 import EditPet from './Components/EditPet';
+import Payment from './Components/Payment/Payment';
 
 
 // Initialize QueryClient for react-query
@@ -100,6 +100,10 @@ const router = createBrowserRouter([
           {
             path: 'my-added-pets', // Relative path
             element: <MyAddedPets />,
+          },
+          {
+            path: 'payment', // Relative path
+            element: <Payment></Payment>,
           },
           {
             path: 'create-donation-campaigns', // Relative path

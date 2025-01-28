@@ -1,6 +1,5 @@
 import React from 'react';
 import Banner from "./Banner";
-import Petlist from '../Petlist';
 
 const Home = () => {
     return (

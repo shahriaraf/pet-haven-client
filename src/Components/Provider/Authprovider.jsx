@@ -8,9 +8,12 @@ import {
   signOut,
   signInWithPopup,
   GoogleAuthProvider,
+  GithubAuthProvider,
 } from "firebase/auth";
 import auth from "../../firebase/firebase.init";
 import AxiosPublic from "../Hooks/axiosPublic";
+import HomePageSkeleton from "../Skeleton/HomePageSkeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 // Context to provide user state and auth functions
 export const AuthContext = createContext(null);
@@ -48,7 +51,7 @@ const Authprovider = ({ children }) => {
   // Function to sign in a user
   const signInUser = async (email, password) => {
     setLoading(true); // Start loading state
-  
+
     try {
       // Sign in with email and password
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -64,7 +67,7 @@ const Authprovider = ({ children }) => {
       setLoading(false); // Stop loading state
     }
   };
-  
+
 
   // Function to sign out the user
   const signOutUser = async () => {
@@ -96,29 +99,50 @@ const Authprovider = ({ children }) => {
     }
   };
 
+  // GitHub Authentication Provider
+  const githubProvider = new GithubAuthProvider();
+
+  // Function to sign in with GitHub
+  const signInWithGitHub = async () => {
+    setLoading(true);
+    try {
+      const result = await signInWithPopup(auth, githubProvider);
+      const user = result.user;
+      setUser(user); // Update user state with GitHub login details
+      return user;
+    } catch (error) {
+      console.error("Error signing in with GitHub:", error);
+      setError(error.message); // Set error message to be displayed
+      throw error;
+    } finally {
+      setLoading(false); // Set loading to false when done
+    }
+  };
+
+
   // Firebase Auth state listener to maintain session persistence
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser); // Update the user state when the auth state changes
       setLoading(false);
-      if(currentUser){
-        const userInfo = {email: currentUser.email};
+      if (currentUser) {
+        const userInfo = { email: currentUser.email };
         axiosPublic.post('/jwt', userInfo)
-        .then(res => {
-          if(res.data.token){
-            localStorage.setItem('access-token', res.data.token);
-          }
-        })
+          .then(res => {
+            if (res.data.token) {
+              localStorage.setItem('access-token', res.data.token);
+            }
+          })
       }
     });
-  
+
     return () => unsubscribe(); // Cleanup the listener on unmount
   }, [axiosPublic]);
-  
+
   if (loading) {
-    return <div>Loading...</div>; // Display a loading indicator while checking auth state
+    return <HomePageSkeleton></HomePageSkeleton>; // Display a loading indicator while checking auth state
   }
-  
+
   // Context value to expose user state and auth functions
   const userInfo = {
     user,
@@ -128,6 +152,7 @@ const Authprovider = ({ children }) => {
     signInUser,
     signOutUser,
     signInWithGoogle,
+    signInWithGitHub
   };
 
   return (

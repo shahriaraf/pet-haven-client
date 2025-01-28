@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import AxiosSecure from "./Hooks/AxiosSecure";
+import TableSkeleton from "./Skeleton/TableSkeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 
 const AllPets = () => {
@@ -52,7 +54,7 @@ const AllPets = () => {
     }
   };
 
-  if (isLoading) return <p>Loading pets...</p>;
+  if (isLoading) return <TableSkeleton></TableSkeleton>
 
   return (
     <div className="p-6">

@@ -7,7 +7,7 @@ const Banner = () => {
     <div
       className="relative w-full pt-16 mx-auto shadow-lg flex items-center justify-between bg-cover bg-center"
       style={{
-        height: "90vh",
+        height: "110vh",
         backgroundImage: "url('https://i.ibb.co.com/wgHfmZV/photo-1571325654970-9c00c5432fcb-1.jpg')", // Replace with your background image URL
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -16,7 +16,7 @@ const Banner = () => {
       }}
     >
       {/* Left Section: Welcome Message */}
-      <div className="w-1/2 pl-10 pr-5 text-white z-10 space-y-6">
+      <div className="md:w-1/2 w-full  pl-10 pr-5 text-white z-10 space-y-6">
         <h1 className="text-5xl md:text-7xl font-bold leading-tight animate-fadeIn">
           Welcome to <span className="text-yellow-500">Pet Haven</span>
         </h1>
@@ -29,7 +29,7 @@ const Banner = () => {
       </div>
 
       {/* Right Section: Lottie Animation */}
-      <div className="w-1/2 flex justify-center items-center">
+      <div className="hidden w-1/2 md:flex justify-center items-center">
         <Lottie
           animationData={familyWithPets}
           className="w-full max-w-lg h-auto animate-slideIn"

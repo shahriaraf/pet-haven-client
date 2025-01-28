@@ -5,7 +5,7 @@ import { AuthContext } from "./Provider/Authprovider";
 import AxiosPublic from "./Hooks/axiosPublic";
 
 const Login = () => {
-    const { signInUser, error, signInWithGoogle } = useContext(AuthContext);
+    const { signInUser, error, signInWithGoogle, signInWithGitHub } = useContext(AuthContext);
     const navigate = useNavigate();
     const axiosPublic = AxiosPublic();
 
@@ -41,10 +41,26 @@ const Login = () => {
 
         })
     };
+    const handleGithubSignIn = () => {
+        signInWithGitHub()
+        .then(result => {
+            console.log(result.user);
+            const userInfo = {
+                email: result.user?.email,
+                name: result.user?.displayName
+            }
+            axiosPublic.post('/users', userInfo)
+            .then(res => {
+                console.log(res.data);
+                navigate("/");
+            })
+
+        })
+    };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white pt-16">
-            <div className="w-full max-w-md p-8 bg-[#6d165D] text-white rounded-lg shadow-2xl shadow-gray-500">
+        <div className="min-h-screen flex items-center justify-center bg-white pt-36 pb-20">
+            <div className="w-full max-w-[340px] md:max-w-md p-8 bg-[#6d165D] text-white rounded-lg shadow-2xl shadow-gray-500">
                 <div className="flex items-center justify-center">
                     <img
                         src="https://i.ibb.co.com/nLwLNqp/pethavenproject-logo-202-500x500-1.png"
@@ -136,6 +152,14 @@ const Login = () => {
                         className="w-full bg-white hover:bg-gray-300 text-[#6d165D] transition-colors py-3 rounded-lg font-semibold shadow-md"
                     >
                         Sign in with Google <i className="fa-brands fa-google"></i>
+                    </button>
+                </div>
+                <div className="mt-6 text-center">
+                    <button
+                        onClick={handleGithubSignIn}
+                        className="w-full bg-white hover:bg-gray-300 text-[#6d165D] transition-colors py-3 rounded-lg font-semibold shadow-md"
+                    >
+                        Sign in with Github <i className="fa-brands fa-github"></i>
                     </button>
                 </div>
             </div>

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import "react-loading-skeleton/dist/skeleton.css";
+import CardSkeleton from "./Skeleton/CardSkeleton";
 
 const Donation = () => {
   const [campaigns, setCampaigns] = useState([]);
@@ -45,7 +47,9 @@ const Donation = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore, loading]);
+  }, [hasMore]);
+
+  if (loading) return <CardSkeleton></CardSkeleton>
 
   return (
     <div className="max-w-7xl mx-auto p-6 pt-36">

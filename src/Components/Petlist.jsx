@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import "react-loading-skeleton/dist/skeleton.css";
+import CardSkeleton from './Skeleton/CardSkeleton';
 
 const PetList = () => {
   const [pets, setPets] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [filteredPets, setFilteredPets] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Fetch pets data
   useEffect(() => {
@@ -15,6 +18,7 @@ const PetList = () => {
         const data = await response.json();
         const unadoptedPets = data.filter((pet) => !pet.adopted);
         setPets(unadoptedPets);
+        setLoading(false);
       } catch (error) {
         console.error('Failed to fetch pets:', error);
       }
@@ -42,6 +46,8 @@ const PetList = () => {
 
     setFilteredPets(filtered);
   }, [pets, searchTerm, categoryFilter]);
+
+  if (loading) return <CardSkeleton></CardSkeleton>
 
   return (
     <div className="max-w-7xl mx-auto p-6 pt-36">

@@ -81,7 +81,7 @@ const AddPet = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-4xl mx-auto p-8 mt-10 mb-8 bg-slate-100 shadow-lg shadow-gray-400 text-black rounded-lg"
+      className="md:max-w-4xl max-w-[330px] mx-auto p-8 mt-10 mb-8 bg-slate-100 shadow-lg shadow-gray-400 text-black rounded-lg"
     >
 
       <div className="mb-6">
@@ -96,9 +96,9 @@ const AddPet = () => {
         )}
       </div>
 
-      <div className="flex gap-6 mb-6">
+      <div className="md:flex-row flex flex-col gap-6 mb-6">
         {/* Pet Name */}
-        <div className="w-1/2">
+        <div className="md:w-1/2 w-full mb-5 md:mb-0">
           <label className="block text-lg font-semibold mb-2">Pet Name:</label>
           <input
             type="text"
@@ -107,7 +107,7 @@ const AddPet = () => {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black"
           />
         </div>
-        <div className="w-1/2">
+        <div className="md:w-1/2 w-full mb-5 md:mb-0">
           <label className="block text-lg font-semibold mb-2">Email:</label>
           <input
             value={user.email}
@@ -118,7 +118,7 @@ const AddPet = () => {
         </div>
 
         {/* Pet Age */}
-        <div className="w-1/2">
+        <div className="md:w-1/2 w-full mb-5 md:mb-0">
           <label className="block text-lg font-semibold mb-2">Pet Age:</label>
           <input
             type="text"
@@ -129,9 +129,9 @@ const AddPet = () => {
         </div>
       </div>
 
-      <div className="flex gap-6 mb-6">
+      <div className="md:flex-row flex flex-col gap-6 mb-6">
         {/* Pet Category */}
-        <div className="w-1/2">
+        <div className="md:w-1/2 w-full mb-5 md:mb-0">
           <label className="block text-lg font-semibold mb-2">Pet Category:</label>
           <Select
             options={petCategories}
@@ -141,7 +141,7 @@ const AddPet = () => {
         </div>
 
         {/* Pet Location */}
-        <div className="w-1/2">
+        <div className="md:w-1/2 w-full mb-5 md:mb-0">
           <label className="block text-lg font-semibold mb-2">Pet Location:</label>
           <input
             type="text"
