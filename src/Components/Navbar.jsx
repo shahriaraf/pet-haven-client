@@ -45,6 +45,8 @@ const Navbar = () => {
     };
   }, [drawerOpen]);
 
+  console.log(user)
+
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-[#6d165D]/90 shadow-lg" : "bg-[#6d165D]"
@@ -112,7 +114,7 @@ const Navbar = () => {
               >
                 <img
                   className="w-12 h-12 rounded-full"
-                  src={user.photoURL || "/default-profile.jpg"}
+                  src={ user.photoURL || "/default-profile.jpg"}
                   alt="user photo"
                 />
               </button>

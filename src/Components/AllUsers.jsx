@@ -66,7 +66,7 @@ const AllUsers = () => {
                 <td className="px-2 sm:px-4 py-2 border">{user.email}</td>
                 <td className="px-2 sm:px-4 py-2 border">
                   <img
-                    src={user.photo || '/default-profile.png'}
+                    src={user.photoUrl || '/default-profile.png'}
                     alt={user.name}
                     className="w-10 h-10 sm:w-12 sm:h-12 rounded-full mx-auto"
                   />

@@ -42,7 +42,7 @@ const CreateDonationCampaign = () => {
       };
 
       const response = await fetch(
-        "https://pet-haven-server-sigma.vercel.app/create-donation-campaigns",
+        "https://pet-haven-8d5ba.web.app/create-donation-campaigns",
         {
           method: "POST",
           headers: {

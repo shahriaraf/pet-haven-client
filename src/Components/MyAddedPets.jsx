@@ -39,7 +39,7 @@ const MyAddedPets = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axiosSecure.delete(`/pets/${id}`);
+          await axiosSecure.delete(`/pet/${id}`);
           Swal.fire('Deleted!', 'Pet has been deleted.', 'success');
           fetchPets();
         } catch (error) {

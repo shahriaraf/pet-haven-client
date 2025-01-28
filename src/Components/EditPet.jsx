@@ -76,7 +76,7 @@ const EditPet = () => {
         longDescription: data.longDescription,
       };
 
-      const response = await fetch(`https://pet-haven-server-sigma.vercel.app/update-pet/${id}`, {
+      const response = await fetch(`https://pet-haven-8d5ba.web.app/update-pet/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

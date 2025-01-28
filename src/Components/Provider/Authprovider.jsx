@@ -15,13 +15,13 @@ import AxiosPublic from "../Hooks/axiosPublic";
 import HomePageSkeleton from "../Skeleton/HomePageSkeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-// Context to provide user state and auth functions
+
 export const AuthContext = createContext(null);
 
 const Authprovider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // Error state for handling authentication errors
+  const [error, setError] = useState(null); 
   const axiosPublic = AxiosPublic();
 
   // Function to create a new user
@@ -32,39 +32,40 @@ const Authprovider = ({ children }) => {
       const user = userCredential.user;
 
       // Update the user's profile with name and photo URL
-      await updateProfile(user, {
+      const users = await updateProfile(auth.currentUser, {
         displayName: name,
         photoURL: photoURL,
       });
 
-      setUser(user); // Update the user state with the newly created user
+      setUser(user);
+      console.log({user, users});
       return user;
     } catch (error) {
       console.error("Error creating user:", error);
-      setError(error.message); // Set error message to be displayed
+      setError(error.message); 
       throw error;
     } finally {
-      setLoading(false); // Set loading to false when done
+      setLoading(false);
     }
   };
 
   // Function to sign in a user
   const signInUser = async (email, password) => {
-    setLoading(true); // Start loading state
+    setLoading(true); 
 
     try {
       // Sign in with email and password
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      setUser(user); // Update the user state after successful sign-in
+      setUser(user); 
 
-      return user; // Return user object after successful sign-in
+      return user; 
     } catch (error) {
       console.error("Error signing in:", error);
-      setError(error.message); // Update error state for display
-      throw error; // Re-throw error for further handling if needed
+      setError(error.message); 
+      throw error; 
     } finally {
-      setLoading(false); // Stop loading state
+      setLoading(false);
     }
   };
 
@@ -72,8 +73,8 @@ const Authprovider = ({ children }) => {
   // Function to sign out the user
   const signOutUser = async () => {
     try {
-      await signOut(auth); // Sign out the user from Firebase
-      setUser(null); // Clear the user state
+      await signOut(auth); 
+      setUser(null); 
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -88,14 +89,14 @@ const Authprovider = ({ children }) => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      setUser(user); // Update user state with Google login details
+      setUser(user);
       return user;
     } catch (error) {
       console.error("Error signing in with Google:", error);
-      setError(error.message); // Set error message to be displayed
+      setError(error.message); 
       throw error;
     } finally {
-      setLoading(false); // Set loading to false when done
+      setLoading(false); 
     }
   };
 
@@ -108,22 +109,21 @@ const Authprovider = ({ children }) => {
     try {
       const result = await signInWithPopup(auth, githubProvider);
       const user = result.user;
-      setUser(user); // Update user state with GitHub login details
+      setUser(user); 
       return user;
     } catch (error) {
       console.error("Error signing in with GitHub:", error);
-      setError(error.message); // Set error message to be displayed
+      setError(error.message); 
       throw error;
     } finally {
-      setLoading(false); // Set loading to false when done
+      setLoading(false); 
     }
   };
 
 
-  // Firebase Auth state listener to maintain session persistence
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); // Update the user state when the auth state changes
+      setUser(currentUser);
       setLoading(false);
       if (currentUser) {
         const userInfo = { email: currentUser.email };
@@ -136,14 +136,14 @@ const Authprovider = ({ children }) => {
       }
     });
 
-    return () => unsubscribe(); // Cleanup the listener on unmount
+    return () => unsubscribe(); 
   }, [axiosPublic]);
 
   if (loading) {
-    return <HomePageSkeleton></HomePageSkeleton>; // Display a loading indicator while checking auth state
+    return <HomePageSkeleton></HomePageSkeleton>; 
   }
 
-  // Context value to expose user state and auth functions
+ 
   const userInfo = {
     user,
     loading,
@@ -157,7 +157,7 @@ const Authprovider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={userInfo}>
-      {children} {/* Render children with access to the auth context */}
+      {children} 
     </AuthContext.Provider>
   );
 };

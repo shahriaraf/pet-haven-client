@@ -12,8 +12,8 @@ const Register = () => {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    const name = e.target.name.value;
-    const photo = e.target.photo.value;
+    const displayName = e.target.displayName.value;
+    const photoURL = e.target.photoURL.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
     const confirmPassword = e.target.confirmPassword.value;
@@ -35,16 +35,16 @@ const Register = () => {
       return;
     }
 
-    createUser(email, password)
+    createUser(email, password, displayName, photoURL)
       .then((result) => {
         const loggedUser = result.user;
         console.log(loggedUser);
 
         // Create user entry in the database
         const userInfo = {
-          name: name,
+          displayName: displayName,
           email: email,
-          photo: photo,
+          photoURL: photoURL,
         };
 
         axiosPublic
@@ -76,7 +76,7 @@ const Register = () => {
         console.log(result.user);
         const userInfo = {
           email: result.user?.email,
-          name: result.user?.displayName
+          displayName: result.user?.displayName
         }
         axiosPublic.post('/users', userInfo)
           .then(res => {
@@ -89,20 +89,20 @@ const Register = () => {
 
   const handleGithubSignIn = () => {
     signInWithGitHub()
-    .then(result => {
+      .then(result => {
         console.log(result.user);
         const userInfo = {
-            email: result.user?.email,
-            name: result.user?.displayName
+          email: result.user?.email,
+          displayName: result.user?.displayName
         }
         axiosPublic.post('/users', userInfo)
-        .then(res => {
+          .then(res => {
             console.log(res.data);
             navigate("/");
-        })
+          })
 
-    })
-};
+      })
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white pt-36 pb-20">
@@ -127,13 +127,13 @@ const Register = () => {
 
         <form onSubmit={handleRegister} className="mt-6 space-y-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium">
+            <label htmlFor="displayName" className="block text-sm font-medium">
               Name
             </label>
             <input
               type="text"
-              id="name"
-              name="name"
+              id="displayName"
+              name="displayName"
               placeholder="Enter your name"
               className="w-full mt-1 p-3 text-[#6d165D] rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-[#6d165D]"
               required
@@ -155,13 +155,13 @@ const Register = () => {
           </div>
 
           <div>
-            <label htmlFor="photo" className="block text-sm font-medium">
+            <label htmlFor="photoURL" className="block text-sm font-medium">
               Photo URL
             </label>
             <input
               type="text"
-              id="photo"
-              name="photo"
+              id="photoURL"
+              name="photoURL"
               placeholder="Enter Photo URL"
               className="w-full mt-1 p-3 text-[#6d165D] rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-[#6d165D]"
               required

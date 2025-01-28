@@ -12,7 +12,7 @@ const Donation = () => {
   const fetchCampaigns = async (page) => {
     try {
       setLoading(true);
-      const response = await fetch(`https://pet-haven-server-sigma.vercel.app/donation-campaigns?page=${page}`);
+      const response = await fetch(`https://pet-haven-8d5ba.web.app/donation-campaigns?page=${page}`);
       const data = await response.json();
 
       if (data.length === 0) {

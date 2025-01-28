@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosPublic = axios.create({
-    baseURL: 'https://pet-haven-server-sigma.vercel.app'
+    baseURL: 'https://pet-haven-8d5ba.web.app/'
 })
 
 const AxiosPublic = () => {
