@@ -7,6 +7,7 @@ const axiosSecure = axios.create({
     baseURL: 'https://pet-haven-8d5ba.web.app/'
 })
 
+
 const AxiosSecure = () => {
     const navigate = useNavigate();
     const {signOutUser} = useContext(AuthContext);
