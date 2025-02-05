@@ -103,7 +103,7 @@ npm or yarn
 
 Step 1: Clone the Repository
 
-git clone https://github.com/your-username/petHaven.git
+git clone https://github.com/shahriaraf/pet-haven-client.git
 cd petHaven
 
 Step 2: Install Dependencies
