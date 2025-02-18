@@ -56,7 +56,7 @@ const AddPet = () => {
 
       };
 
-      const response = await fetch("https://pet-haven-8d5ba.web.app/add-pet", {
+      const response = await fetch("https://pet-haven-server-sigma.vercel.app/add-pet", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

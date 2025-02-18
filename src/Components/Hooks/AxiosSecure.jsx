@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Provider/Authprovider";
 
 const axiosSecure = axios.create({
-    baseURL: 'https://pet-haven-8d5ba.web.app/'
+    baseURL: 'https://pet-haven-server-sigma.vercel.app/'
 })
 
 const AxiosSecure = () => {

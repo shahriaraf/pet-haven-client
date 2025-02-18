@@ -5,22 +5,36 @@ const Home = () => {
     return (
         <div>
             <Banner />
-            
+
             {/* Pets Category Section */}
             <section className="py-10 bg-gray-100">
-                <div className="max-w-screen-xl mx-auto px-4">
-                    <h2 className="text-3xl font-bold text-center mb-6">Browse by Pet Categories</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        {['Cats', 'Dogs', 'Rabbits', 'Fish', 'Birds', 'Reptiles'].map((category, index) => (
-                            <div key={index} className="bg-white shadow-md rounded-lg p-4 text-center">
-                                <h3 className="text-lg font-semibold">{category}</h3>
-                                <button className="mt-4 px-4 py-2 bg-[#6d165D] text-white rounded hover:bg-[#ECA511]">
-                                    Explore
-                                </button>
-                            </div>
-                        ))}
+                <div class="w-full md:w-1/3 p-4">
+                    <div class="bg-white shadow-lg rounded-lg p-6 relative group overflow-hidden">
+              
+                        <div class="flex justify-center text-4xl text-yellow-500">
+                            <span class="flaticon-016-pancake"></span>
+                        </div>
+
+                   
+                        <div class="mt-4 text-center">
+                            <h4 class="text-xl font-semibold text-gray-800">
+                                <a href="https://shtheme.org/demosd/winta/?menu=dessert" class="hover:text-yellow-500 transition">
+                                    Dessert
+                                </a>
+                            </h4>
+                        </div>
+
+                  
+                        <ul
+                            class="absolute bottom-0 left-0 w-full bg-white shadow-lg rounded-b-lg opacity-0 transform translate-y-full 
+             group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-in-out text-gray-700 text-center">
+                            <li class="border-b py-2">Bourbon Pecan Pie <span class="float-right font-semibold">$50</span></li>
+                            <li class="border-b py-2">New York Cheesecake <span class="float-right font-semibold">$32</span></li>
+                            <li class="py-2">Rusty’s Ice-Cream <span class="float-right font-semibold">$22</span></li>
+                        </ul>
                     </div>
                 </div>
+
             </section>
 
             {/* Call to Action Section */}

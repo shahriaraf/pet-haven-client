@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
+    "@react-three/drei": "^9.121.5",
+    "@react-three/fiber": "^8.17.14",
     "@stripe/react-stripe-js": "^3.1.1",
     "@stripe/stripe-js": "^5.5.0",
     "@tanstack/react-query": "^5.64.1",
@@ -19,6 +21,7 @@
     "firebase": "^11.1.0",
     "flowbite": "^2.5.2",
     "formik": "^2.4.6",
+    "framer-motion": "^12.4.4",
     "jsonwebtoken": "^9.0.2",
     "localforage": "^1.10.0",
     "lottie-react": "^2.4.1",
@@ -34,6 +37,7 @@
     "react-table": "^7.8.0",
     "sort-by": "^1.2.0",
     "sweetalert2": "^11.15.10",
+    "three": "^0.173.0",
     "yup": "^1.6.1"
   },
   "devDependencies": {

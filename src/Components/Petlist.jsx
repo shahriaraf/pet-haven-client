@@ -14,7 +14,7 @@ const PetList = () => {
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const response = await fetch('https://pet-haven-8d5ba.web.app/pets');
+        const response = await fetch('https://pet-haven-server-sigma.vercel.app/pets');
         const data = await response.json();
         const unadoptedPets = data.filter((pet) => !pet.adopted);
         setPets(unadoptedPets);

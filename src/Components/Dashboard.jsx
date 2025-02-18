@@ -8,6 +8,9 @@ import AllDonations from './AllDonations';
 import CreateDonationCampaign from './CreateDonationCampaign';
 import AdoptionRequests from './AdoptionRequests';
 import MyDonationCampaigns from './MyDonationCampaigns';
+import { NavLink } from 'react-router-dom';
+import Footer from './Footer';
+
 
 const Dashboard = () => {
   const [activePage, setActivePage] = useState('AddPet'); // Tracks which page to display
@@ -39,13 +42,15 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen pt-20">
+    <div>
+       <div className="flex h-screen">
       {/* Sidebar for Large and Medium Devices */}
       <div className="hidden lg:flex lg:w-56 bg-gray-800 text-white flex-col">
         <div className="p-4 text-center text-xl font-bold bg-[#6d165D]">
           {isAdmin ? 'Admin' : 'User'} <span className="text-[#ECA511]">D</span>ashboard
         </div>
         <nav className="flex-grow p-4 space-y-4">
+          <NavLink to='/'  className='block w-full text-left px-3 py-2 rounded-md hover:bg-[#ECA511]'>Home</NavLink>
           {[...pages, ...(isAdmin ? adminPages : [])].map(({ key, label }) => (
             <button
               key={key}
@@ -57,18 +62,18 @@ const Dashboard = () => {
           ))}
         </nav>
       </div>
-
+     
       {/* Main Content */}
-      <div className="flex-grow flex flex-col pt-3">
-      <div className="bg-white w-full h-16 flex items-center justify-between px-4 shadow md:hidden">
+      <div className="flex-grow flex flex-col">
+      <div className="bg-[#6d165D] w-full py-3 flex items-center justify-between px-4 shadow md:hidden">
         <div className="flex items-center pb-2">
           {/* Bar Icon */}
-          <i
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="fa-solid fa-bars-staggered text-black text-xl cursor-pointer mr-4"
-          ></i>
+          <div className='pr-2 text-white'>
+          <svg onClick={() => setIsDropdownOpen(!isDropdownOpen)} xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"></path></svg>
+          </div>
+         
           {/* User/Admin Dashboard Text */}
-          <span className="text-xl font-extrabold" style={{ color: '#6d165D' }}>
+          <span className="text-xl font-bold" style={{ color: 'white' }}>
             {isAdmin ? 'Admin' : 'User'} <span className="text-[#ECA511]">D</span>ashboard
           </span>
         </div>
@@ -87,6 +92,7 @@ const Dashboard = () => {
       {isDropdownOpen && (
         <div className="absolute top-24 left-4 right-4 bg-white border rounded-lg shadow-lg z-50">
           <nav className="p-4 space-y-2">
+          <NavLink to='/'  className='block w-full text-left px-3 py-2 rounded-md hover:bg-[#ECA511]'>Home</NavLink>
             {[...pages, ...(isAdmin ? adminPages : [])].map(({ key, label }) => (
               <button
                 key={key}
@@ -105,6 +111,9 @@ const Dashboard = () => {
         </div>
       )}
     </div>
+    <Footer></Footer>
+    </div>
+   
   );
 };
 

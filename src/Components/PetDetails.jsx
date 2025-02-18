@@ -17,7 +17,7 @@ const PetDetails = () => {
   useEffect(() => {
     const fetchPetDetails = async () => {
       try {
-        const response = await axios.get(`https://pet-haven-8d5ba.web.app/pets/${id}`);
+        const response = await axios.get(`https://pet-haven-server-sigma.vercel.app/pets/${id}`);
         setPet(response.data);
       } catch (error) {
         setError(
@@ -53,7 +53,7 @@ const PetDetails = () => {
     };
 
     try {
-      await axios.post('https://pet-haven-8d5ba.web.app/adoption-requests', adoptionData);
+      await axios.post('https://pet-haven-server-sigma.vercel.app/adoption-requests', adoptionData);
       alert('Adoption request submitted successfully!');
       setShowModal(false);
     } catch (error) {

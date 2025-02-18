@@ -92,49 +92,49 @@ const router = createBrowserRouter([
       {
         path: 'donation/:id',
         element: <EditDonation></EditDonation>,
-      },
-      {
-        path: '/dashboard',
-        element: <Dashboard></Dashboard>, // Main Dashboard Component
-        errorElement: <Errorpage />, // Fallback for route errors
-        children: [
-          {
-            path: 'my-added-pets', // Relative path
-            element: <MyAddedPets />,
-          },
-          {
-            path: 'payment', // Relative path
-            element: <Payment></Payment>,
-          },
-          {
-            path: 'create-donation-campaigns', // Relative path
-            element: <CreateDonationCampaign></CreateDonationCampaign>
-          },
-          {
-            path: 'my-donation-campaigns', // Relative path
-            element: <MyDonationCampaigns></MyDonationCampaigns>
-          },
-          {
-            path: 'adoption-requests', // Relative path
-            element: <AdoptionRequests></AdoptionRequests>
-          },
-          {
-            path: 'all-users', // Relative path
-            element: <AdminRoute><AllUsers></AllUsers></AdminRoute>,
-          },
-          {
-            path: 'all-pets', // Relative path
-            element: <AdminRoute><AllPets></AllPets></AdminRoute>,
-          },
-          {
-            path: 'all-donations', // Relative path
-            element: <AdminRoute><AllDonations></AllDonations></AdminRoute>,
-          },
-
-        ],
-      },
+      }
     ],
     
+  },
+  {
+    path: '/dashboard',
+    element: <Dashboard></Dashboard>, // Main Dashboard Component
+    errorElement: <Errorpage />, // Fallback for route errors
+    children: [
+      {
+        path: 'my-added-pets', // Relative path
+        element: <MyAddedPets />,
+      },
+      {
+        path: 'payment', // Relative path
+        element: <Payment></Payment>,
+      },
+      {
+        path: 'create-donation-campaigns', // Relative path
+        element: <CreateDonationCampaign></CreateDonationCampaign>
+      },
+      {
+        path: 'my-donation-campaigns', // Relative path
+        element: <MyDonationCampaigns></MyDonationCampaigns>
+      },
+      {
+        path: 'adoption-requests', // Relative path
+        element: <AdoptionRequests></AdoptionRequests>
+      },
+      {
+        path: 'all-users', // Relative path
+        element: <AdminRoute><AllUsers></AllUsers></AdminRoute>,
+      },
+      {
+        path: 'all-pets', // Relative path
+        element: <AdminRoute><AllPets></AllPets></AdminRoute>,
+      },
+      {
+        path: 'all-donations', // Relative path
+        element: <AdminRoute><AllDonations></AllDonations></AdminRoute>,
+      },
+
+    ],
   },
   {
     path: '*',
