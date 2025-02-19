@@ -51,7 +51,6 @@ const PetList = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6 pt-36">
-      <h1 className="text-3xl font-bold text-[#6d165D] text-center mb-12">Available Pets</h1>
 
       {/* Filters */}
       <div className="flex justify-between items-center mb-6">
