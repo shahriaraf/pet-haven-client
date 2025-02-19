@@ -31,6 +31,7 @@ import EditDonation from './Components/EditDonation';
 import EditPet from './Components/EditPet';
 import Payment from './Components/Payment/Payment';
 import PrivateRoute from './Components/Privateroute';
+import ThemeProvider from './Components/Provider/ThemeProvider';
 
 
 // Initialize QueryClient for react-query
@@ -94,7 +95,7 @@ const router = createBrowserRouter([
         element: <EditDonation></EditDonation>,
       }
     ],
-    
+
   },
   {
     path: '/dashboard',
@@ -146,9 +147,11 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Authprovider>
-        <RouterProvider router={router} />
-      </Authprovider>
+      <ThemeProvider>
+        <Authprovider>
+          <RouterProvider router={router} />
+        </Authprovider>
+      </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>
 );

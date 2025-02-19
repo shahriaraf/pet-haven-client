@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "./Provider/Authprovider";
+import { ThemeContext } from "./Provider/ThemeProvider";
 
 const Navbar = () => {
   const { user, signOutUser } = useContext(AuthContext);
+  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
   const [isScrolled, setIsScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -50,9 +52,8 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? "bg-[#6d165D] shadow-lg" : "bg-[#6d165D]"
-      } text-white`}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-[#6d165D] shadow-lg" : "bg-[#6d165D]"
+        } text-white`}
     >
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
         {/* Logo & Drawer Button */}
@@ -73,6 +74,7 @@ const Navbar = () => {
               Pet<span className="text-[#ECA511]">H</span>aven
             </span>
           </a>
+
         </div>
 
         {/* Nav Items - Desktop */}
@@ -115,6 +117,9 @@ const Navbar = () => {
 
         {/* Profile & Logout */}
         <div className="flex items-center space-x-4">
+          <button onClick={toggleDarkMode}>
+            {darkMode ? <i class="fa-solid text-black text-2xl fa-moon"></i> : <i class="fa-solid text-2xl fa-sun"></i>}
+          </button>
           {user && (
             <div className="relative">
               <button
@@ -128,6 +133,7 @@ const Navbar = () => {
                   alt="user"
                 />
               </button>
+
               {dropdownOpen && (
                 <div className="absolute top-12 right-0 bg-white text-[#6d165D] p-3 rounded-md shadow-lg">
                   <ul className="space-y-2">
@@ -157,14 +163,12 @@ const Navbar = () => {
 
       {/* Mobile Drawer */}
       <div
-        className={`fixed inset-0 bg-black bg-opacity-50 flex ${
-          drawerOpen ? "visible" : "invisible"
-        }`}
+        className={`fixed inset-0 bg-black bg-opacity-50 flex ${drawerOpen ? "visible" : "invisible"
+          }`}
       >
         <div
-          className={`w-64 bg-black h-full shadow-lg p-5 flex flex-col transform ${
-            drawerOpen ? "translate-x-0" : "-translate-x-full"
-          } transition-transform duration-300 drawer`}
+          className={`w-64 bg-black h-full shadow-lg p-5 flex flex-col transform ${drawerOpen ? "translate-x-0" : "-translate-x-full"
+            } transition-transform duration-300 drawer`}
         >
           {/* Close Button */}
           <button

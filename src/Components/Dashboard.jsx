@@ -78,14 +78,14 @@ const Dashboard = () => {
           </span>
         </div>
       </div>
-        <div className="bg-gray-100 px-6 py-4 shadow">
-          <h1 className="text-2xl font-semibold" style={{ color: '#6d165D' }}>
+        <div className="px-6 py-4 shadow">
+          <h1 className="text-2xl font-semibold">
             {pages.find((p) => p.key === activePage)?.label ||
               adminPages.find((p) => p.key === activePage)?.label ||
               'Dashboard'}
           </h1>
         </div>
-        <div className="flex-grow overflow-y-auto bg-gray-50">{renderPage()}</div>
+        <div className="flex-grow overflow-y-auto">{renderPage()}</div>
       </div>
 
       {/* Dropdown Menu for Mobile */}

@@ -7,11 +7,11 @@ const Banner = () => {
       className="relative w-full pt-16 mx-auto shadow-lg flex items-center justify-between bg-cover bg-center"
       style={{
         height: "110vh",
-        backgroundImage: "url('https://i.ibb.co.com/wgHfmZV/photo-1571325654970-9c00c5432fcb-1.jpg')", // Replace with your background image URL
+        backgroundImage: "url('https://gfxpartner.com/pawfy/inc/assets/images/hero-img-2.png')", // Replace with your background image URL
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundBlendMode: "overlay",
-        backgroundColor: "rgba(0,0,0,0.6)", // Slight overlay for better text visibility
+        backgroundColor: "rgba(0,0,0,0.3)", // Slight overlay for better text visibility
       }}
     >
       <div className="md:w-1/2 w-full pl-10 pr-5 text-white z-10 space-y-6">

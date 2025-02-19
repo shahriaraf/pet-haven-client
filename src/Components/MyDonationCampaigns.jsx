@@ -65,7 +65,7 @@ const MyDonationCampaigns = () => {
   return (
     <div className="container mx-auto p-4 sm:p-6">
       <table className="table-auto w-full border-collapse border border-gray-200 text-sm sm:text-base overflow-x-auto">
-        <thead className="bg-gray-100">
+        <thead>
           <tr>
             <th className="border px-2 sm:px-4 py-2">Pet Name</th>
             <th className="border px-2 sm:px-4 py-2">Maximum Donation</th>

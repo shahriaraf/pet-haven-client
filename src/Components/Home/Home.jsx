@@ -1,6 +1,7 @@
 import React from "react";
 import Banner from "./Banner";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const Home = () => {
     return (
@@ -19,65 +20,16 @@ const Home = () => {
                 {/* Hero Section */}
                 <Banner />
 
-                {/* Pets Category Section */}
-                <section className="py-10 backdrop-blur-md bg-white/20">
-                    <div className="w-full md:w-1/3 p-4">
-                        <div className="bg-white shadow-lg rounded-lg p-6 relative group overflow-hidden">
-                            {/* Icon */}
-                            <div className="flex justify-center text-4xl text-yellow-500">
-                                <span className="flaticon-016-pancake"></span>
-                            </div>
-
-                            {/* Title */}
-                            <div className="mt-4 text-center">
-                                <h4 className="text-xl font-semibold text-gray-800">
-                                    <a
-                                        href="https://shtheme.org/demosd/winta/?menu=dessert"
-                                        className="hover:text-yellow-500 transition"
-                                    >
-                                        Dessert
-                                    </a>
-                                </h4>
-                            </div>
-
-                            {/* Hidden menu */}
-                            <ul className="absolute bottom-0 left-0 w-full bg-white shadow-lg rounded-b-lg opacity-0 transform translate-y-full 
-              group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-in-out text-gray-700 text-center">
-                                <li className="border-b py-2">
-                                    Bourbon Pecan Pie <span className="float-right font-semibold">$50</span>
-                                </li>
-                                <li className="border-b py-2">
-                                    New York Cheesecake <span className="float-right font-semibold">$32</span>
-                                </li>
-                                <li className="py-2">
-                                    Rusty’s Ice-Cream <span className="float-right font-semibold">$22</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Call to Action Section */}
-                <section className="py-16 bg-transparent text-white text-center ">
-                    <h2 className="text-4xl font-bold mb-4">Adopt a Pet, Change a Life</h2>
-                    <p className="text-lg mb-6">
-                        Give a loving home to a pet and make a difference. Every adoption helps save lives!
-                    </p>
-                    <button className="px-6 py-3 bg-white text-[#6d165D] rounded-lg font-bold hover:bg-gray-100">
-                        Find Your Companion
-                    </button>
-                </section>
-
                 {/* About Us Section */}
-                <section className="py-12 bg-[#ECA511] text-center">
+                <section className="py-12 bg-white text-center">
                     <div className="max-w-screen-lg mx-auto px-4">
                         <motion.h1
-                            className="text-5xl md:text-7xl font-bold leading-tight"
+                            className="text-4xl md:text-4xl text-black font-bold leading-tight mb-3"
                             initial={{ x: 700, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
                             transition={{ duration: 1.5, ease: "easeOut" }}
                         >
-                            Welcome to <span className="text-yellow-500">Pet Haven</span>
+                            About Us
                         </motion.h1>
                         <p className="text-gray-700">
                             At PetHaven, we believe every pet deserves a loving home. Our platform connects caring individuals
@@ -85,26 +37,6 @@ const Home = () => {
                         </p>
                     </div>
                 </section>
-
-                {/* Testimonials Section */}
-                <section className="py-12 bg-gray-100/90 backdrop-blur-md">
-                    <div className="max-w-screen-lg mx-auto px-4">
-                        <h2 className="text-3xl font-bold text-center mb-6">What People Say</h2>
-                        <div className="grid md:grid-cols-3 gap-6">
-                            {[
-                                "Adopting my cat from PetHaven changed my life. She's my best friend now!",
-                                "Thanks to PetHaven, I found a perfect companion in my dog, Max!",
-                                "The adoption process was so easy, and now my bunny brings so much joy to my family!",
-                            ].map((testimonial, index) => (
-                                <div key={index} className="bg-white shadow-md rounded-lg p-4">
-                                    <p className="text-gray-700 italic">"{testimonial}"</p>
-                                    <p className="text-right mt-4 font-bold">- Happy Adopter</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
 
                 <section className="relative items-center justify-center bg-gray-100 p-10">
                     <div className="w-9/12 m-auto">
@@ -140,13 +72,10 @@ const Home = () => {
                                         className="w-12 h-12"
                                     />
                                 </a>
-                                <h6 className="text-lg font-semibold mt-2">
-                                    <a
-                                        href="https://onleash.ancorathemes.com/services/daily-walking/"
-                                        className="hover:underline"
-                                    >
+                                <h6 className="text-lg text-gray-600 font-normal mt-2">
+                                  
                                         Daily Walking
-                                    </a>
+                                   
                                 </h6>
                                
                             </div>
@@ -160,13 +89,10 @@ const Home = () => {
                                         className="w-12 h-12"
                                     />
                                 </a>
-                                <h6 className="text-lg font-semibold mt-2">
-                                    <a
-                                        href="https://onleash.ancorathemes.com/services/easy-process/"
-                                        className="hover:underline"
-                                    >
+                                <h6 className="text-lg text-gray-600 font-normal mt-2">
+                    
                                         Easy Process
-                                    </a>
+                                   
                                 </h6>
                               
                             </div>
@@ -177,16 +103,13 @@ const Home = () => {
                                     <img
                                         src="https://onleash.ancorathemes.com/wp-content/themes/onleash/trx_addons/css/icons.png/saving_time.png"
                                         alt="Saving Time"
-                                        className="w-12 h-12"
+                                        className="w-12 h-12 mb-2"
                                     />
                                 </a>
-                                <h6 className="text-lg font-semibold">
-                                    <a
-                                        href="https://onleash.ancorathemes.com/services/saving-your-time/"
-                                        className="hover:underline"
-                                    >
+                                <h6 className="text-lg text-gray-600 font-normal">
+                                   
                                         Saving Your Time
-                                    </a>
+                                   
                                 </h6>
                             </div>
                         </div>
@@ -195,8 +118,22 @@ const Home = () => {
                     </div>
                 </section>
 
+               
+
+                 {/* Call to Action Section */}
+                 <section className="py-16 bg-transparent text-white text-center ">
+                    <h2 className="text-4xl font-bold mb-4">Adopt a Pet, Change a Life</h2>
+                    <p className="text-lg mb-6">
+                        Give a loving home to a pet and make a difference. Every adoption helps save lives!
+                    </p>
+                   <Link to='/petlist'> <button className="px-6 py-3 bg-white text-[#6d165D] rounded-lg font-bold hover:bg-gray-100">
+                        Find Your Companion
+                    </button></Link>
+                </section>
+                
+
                 {/* Volunteer & Donation Section */}
-                <section className="py-16 bg-[#6d165D]/80 text-white backdrop-blur-md">
+                <section className="py-16 bg-[#6d165D] text-white">
                     <div className="max-w-screen-lg mx-auto px-4 text-center">
                         <h2 className="text-4xl font-bold mb-6">Help Us Make a Difference</h2>
                         <p className="text-lg mb-6">
@@ -206,9 +143,27 @@ const Home = () => {
                             <button className="px-6 py-3 bg-[#ECA511] text-white rounded-lg font-bold hover:bg-[#ffc75f]">
                                 Become a Volunteer
                             </button>
-                            <button className="px-6 py-3 bg-white text-[#6d165D] rounded-lg font-bold hover:bg-gray-100">
+                          <Link to='/donation'>  <button className="px-6 py-3 bg-white text-[#6d165D] rounded-lg font-bold hover:bg-gray-100">
                                 Donate Now
-                            </button>
+                            </button></Link>
+                        </div>
+                    </div>
+                </section>
+                  {/* Testimonials Section */}
+                  <section className="py-12 bg-gray-100">
+                    <div className="max-w-screen-lg mx-auto px-4">
+                        <h2 className="text-3xl text-black font-bold text-center mb-6">What People Say</h2>
+                        <div className="grid md:grid-cols-3 gap-6">
+                            {[
+                                "Adopting my cat from PetHaven changed my life. She's my best friend now!",
+                                "Thanks to PetHaven, I found a perfect companion in my dog, Max!",
+                                "The adoption process was so easy, and now my bunny brings so much joy to my family!",
+                            ].map((testimonial, index) => (
+                                <div key={index} className="bg-white shadow-md rounded-lg p-4">
+                                    <p className="text-gray-700 italic">"{testimonial}"</p>
+                                    <p className="text-right mt-4 font-bold">- Happy Adopter</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </section>

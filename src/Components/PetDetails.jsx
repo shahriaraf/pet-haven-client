@@ -72,7 +72,7 @@ const PetDetails = () => {
 
   return (
     <div className="max-w-5xl mx-auto p-6 pt-36 flex justify-center">
-      <div className="max-w-3xl bg-white border border-gray-200 rounded-lg shadow-lg">
+      <div className="max-w-3xl border card border-gray-200 rounded-lg shadow-lg">
         <img
           src={pet.petImage}
           alt={pet.petName}
@@ -85,16 +85,16 @@ const PetDetails = () => {
           >
             {pet.petName}
           </h1>
-          <p className="mb-2 font-normal text-gray-700">
+          <p className="mb-2 font-normal">
             <strong>Age:</strong> {pet.petAge}
           </p>
-          <p className="mb-2 font-normal text-gray-700">
+          <p className="mb-2 font-normal">
             <strong>Category:</strong> {pet.petCategory}
           </p>
-          <p className="mb-2 font-normal text-gray-700">
+          <p className="mb-2 font-normal">
             <strong>Location:</strong> {pet.petLocation}
           </p>
-          <p className="mb-3 font-normal text-gray-700">
+          <p className="mb-3 font-normal">
             <strong>Description:</strong> {pet.longDescription}
           </p>
           <button

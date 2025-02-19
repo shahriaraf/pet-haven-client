@@ -5,11 +5,11 @@ import 'react-loading-skeleton/dist/skeleton.css';
 const TableSkeleton = ({ rows = 5, columns = 4 }) => {
   return (
     <div className="overflow-x-auto mt-40 mb-20">
-      <table className="table-auto w-full border-collapse border border-gray-200">
+      <table className="table-auto w-full border-collapse border">
         <thead>
           <tr>
             {Array.from({ length: columns }).map((_, colIndex) => (
-              <th key={colIndex} className="border border-gray-300 px-4 py-2">
+              <th key={colIndex} className="border px-4 py-2">
                 <Skeleton height={20} />
               </th>
             ))}
@@ -19,7 +19,7 @@ const TableSkeleton = ({ rows = 5, columns = 4 }) => {
           {Array.from({ length: rows }).map((_, rowIndex) => (
             <tr key={rowIndex}>
               {Array.from({ length: columns }).map((_, colIndex) => (
-                <td key={colIndex} className="border border-gray-300 px-4 py-2">
+                <td key={colIndex} className="border px-4 py-2">
                   <Skeleton height={20} />
                 </td>
               ))}

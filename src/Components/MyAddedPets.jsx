@@ -68,7 +68,7 @@ const MyAddedPets = () => {
   return (
     <div>
       <table className="table-auto w-full overflow-x-auto border-collapse border border-gray-300 shadow-lg text-sm sm:text-base">
-        <thead className="bg-gray-200">
+        <thead>
           <tr>
             <th className="border px-2 sm:px-4 py-1 sm:py-2">Serial No</th>
             <th className="border px-2 sm:px-4 py-1 sm:py-2">Pet Name</th>

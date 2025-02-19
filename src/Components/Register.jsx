@@ -105,7 +105,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white pt-36 pb-20">
+    <div className="min-h-screen flex items-center justify-center pt-36 pb-20">
       <div className="w-full md:max-w-md max-w-[340px] p-8 bg-[#6d165D] text-white rounded-lg shadow-2xl shadow-gray-500">
         <div className="flex items-center justify-center">
           <img

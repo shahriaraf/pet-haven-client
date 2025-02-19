@@ -58,30 +58,30 @@ const PetList = () => {
         <input
           type="text"
           placeholder="Search by name..."
-          className="w-1/2 p-2 border rounded-lg"
+          className="w-1/2 p-2 border rounded-lg bg-transparent"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
 
         {/* Category Filter */}
         <select
-          className="px-3 py-1 border rounded-full "
+          className="px-3 py-1 bg-transparent border rounded-full "
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
         >
-          <option value="">All Categories</option>
-          <option value="Dog">Dog</option>
-          <option value="Cat">Cat</option>
-          <option value="Bird">Bird</option>
-          <option value="Reptile">Reptile</option>
-          <option value="Other">Other</option>
+          <option className='bg-transparent' value="">All Categories</option>
+          <option className='bg-transparent' value="Dog">Dog</option>
+          <option className='bg-transparent' value="Cat">Cat</option>
+          <option className='bg-transparent' value="Bird">Bird</option>
+          <option className='bg-transparent' value="Reptile">Reptile</option>
+          <option className='bg-transparent' value="Other">Other</option>
         </select>
       </div>
 
       {/* Pet Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 card sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredPets.map((pet) => (
-          <div key={pet._id} className="bg-slate-100 shadow-lg shadow-gray-400 rounded-lg overflow-hidden">
+          <div key={pet._id} className="shadow-lg shadow-gray-400 rounded-lg overflow-hidden">
             <img
               src={pet.petImage}
               alt={pet.petName}

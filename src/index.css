@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Default Light Theme */
+body.light-theme {
+    background-color: white;
+    color: black;
+  }
+  
+  /* Dark Mode */
+  body.dark-theme {
+    background-color: black;
+    color: white;
+  }
+ 

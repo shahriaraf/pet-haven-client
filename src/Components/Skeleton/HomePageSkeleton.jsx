@@ -15,7 +15,7 @@ const HomePageSkeleton = () => {
         {Array.from({ length: 6 }).map((_, index) => (
           <div
             key={index}
-            className="p-4 border border-gray-300 rounded-2xl shadow-lg bg-white"
+            className="p-4 border rounded-2xl shadow-lg"
           >
             <Skeleton height={180} width="100%" borderRadius={12} />
             <div className="mt-4 space-y-2">

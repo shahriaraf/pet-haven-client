@@ -59,7 +59,7 @@ const Donation = () => {
         {campaigns.map((campaign, index) => (
           <div
             key={index}
-            className="bg-slate-100 shadow-lg shadow-gray-400 rounded-lg overflow-hidden"
+            className="shadow-lg shadow-gray-400 rounded-lg overflow-hidden"
           >
             <img
               src={campaign.petPicture}

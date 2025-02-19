@@ -59,7 +59,7 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white pt-36 pb-20">
+        <div className="min-h-screen flex items-center justify-center pt-36 pb-20">
             <div className="w-full max-w-[340px] md:max-w-md p-8 bg-[#6d165D] text-white rounded-lg shadow-2xl shadow-gray-500">
                 <div className="flex items-center justify-center">
                     <img
