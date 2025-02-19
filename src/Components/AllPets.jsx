@@ -58,9 +58,9 @@ const AllPets = () => {
 
   return (
     <div className="p-6">
-      <table className="w-full border border-gray-200 bg-slate-100 shadow-lg shadow-gray-400">
+      <table className="w-full border border-gray-200 shadow-lg shadow-gray-400">
         <thead>
-          <tr className="bg-gray-100">
+          <tr>
             <th className="p-2 border">Image</th>
             <th className="p-2 border">Name</th>
             <th className="p-2 border">Age</th>

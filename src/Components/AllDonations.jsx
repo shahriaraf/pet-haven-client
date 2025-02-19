@@ -75,7 +75,7 @@ const AllDonations = () => {
       <div className="overflow-x-auto">
         <table className="w-full border border-gray-200 text-sm sm:text-base">
           <thead>
-            <tr className="bg-gray-100">
+            <tr>
               <th className="p-2 border">Picture</th>
               <th className="p-2 border">Description</th>
               <th className="p-2 border">Max Donation</th>

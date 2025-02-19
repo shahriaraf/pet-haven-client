@@ -48,8 +48,8 @@ const AllUsers = () => {
 
       {/* Users Table */}
       <div className="overflow-x-auto">
-        <table className="table-auto w-full bg-slate-100 shadow-lg shadow-gray-400 border border-gray-200 rounded-lg text-sm sm:text-base">
-          <thead className="bg-gray-100">
+        <table className="table-auto w-full shadow-lg shadow-gray-400 border border-gray-200 rounded-lg text-sm sm:text-base">
+          <thead>
             <tr>
               <th className="px-2 sm:px-4 py-2 border">#</th>
               <th className="px-2 sm:px-4 py-2 border">Name</th>
