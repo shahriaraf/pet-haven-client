@@ -73,8 +73,6 @@ const MyDonationCampaigns = () => {
             <th className="border px-2 sm:px-4 py-2">Actions</th>
           </tr>
         </thead>
-
-        
         <tbody>
           {donations.map((donation) => (
             <tr key={donation._id} className="text-center">
